@@ -1,0 +1,97 @@
+{
+    "common": {
+        "name": "switchbot-ble",
+        "version": "0.0.1",
+        "news": {
+            "0.0.1": {
+                "en": "initial release",
+                "de": "Erstveröffentlichung",
+                "ru": "Начальная версия",
+                "pt": "lançamento inicial",
+                "nl": "Eerste uitgave",
+                "fr": "Première version",
+                "it": "Versione iniziale",
+                "es": "Versión inicial",
+                "pl": "Pierwsze wydanie",
+                "zh-cn": "首次出版"
+            }
+        },
+        "title": "SwitchBot BLE",
+        "titleLang": {
+            "en": "SwitchBot BLE",
+            "de": "SwitchBot BLE",
+            "ru": "SwitchBot BLE",
+            "pt": "SwitchBot BLE",
+            "nl": "SwitchBot BLE",
+            "fr": "SwitchBot BLE",
+            "it": "SwitchBot BLE",
+            "es": "SwitchBot BLE",
+            "pl": "SwitchBot BLE",
+            "zh-cn": "SwitchBot BLE"
+        },
+        "desc": {
+            "en": "This adapter allows you to move your Switchbot Bot's arm and to monitor the Thermometer & Hygrometer (Meter)",
+            "de": "This adapter allows you to move your Switchbot Bot's arm and to monitor the Thermometer & Hygrometer (Meter)",
+            "ru": "This adapter allows you to move your Switchbot Bot's arm and to monitor the Thermometer & Hygrometer (Meter)",
+            "pt": "This adapter allows you to move your Switchbot Bot's arm and to monitor the Thermometer & Hygrometer (Meter)",
+            "nl": "This adapter allows you to move your Switchbot Bot's arm and to monitor the Thermometer & Hygrometer (Meter)",
+            "fr": "This adapter allows you to move your Switchbot Bot's arm and to monitor the Thermometer & Hygrometer (Meter)",
+            "it": "This adapter allows you to move your Switchbot Bot's arm and to monitor the Thermometer & Hygrometer (Meter)",
+            "es": "This adapter allows you to move your Switchbot Bot's arm and to monitor the Thermometer & Hygrometer (Meter)",
+            "pl": "This adapter allows you to move your Switchbot Bot's arm and to monitor the Thermometer & Hygrometer (Meter)",
+            "zh-cn": "This adapter allows you to move your Switchbot Bot's arm and to monitor the Thermometer & Hygrometer (Meter)"
+        },
+        "authors": [
+            "Sascha <mrb1232@posteo.de>"
+        ],
+        "keywords": [
+            "SwitchBot"
+        ],
+        "license": "MIT",
+        "platform": "Javascript/Node.js",
+        "main": "main.js",
+        "icon": "switchbot-ble.png",
+        "enabled": true,
+        "extIcon": "https://raw.githubusercontent.com/mrbungle64/ioBroker.switchbot-ble/master/admin/switchbot-ble.png",
+        "readme": "https://github.com/mrbungle64/ioBroker.switchbot-ble/blob/master/README.md",
+        "loglevel": "info",
+        "mode": "daemon",
+        "type": "hardware",
+        "compact": true,
+        "materialize": true,
+        "materializeTab": true,
+        "supportCustoms": true,
+        "dependencies": [
+            {
+                "js-controller": ">=1.4.2"
+            }
+        ]
+    },
+    "native": {
+        "interval": 15000
+    },
+    "objects": [],
+    "instanceObjects": [
+        {
+            "_id": "info",
+            "type": "channel",
+            "common": {
+                "name": "Information"
+            },
+            "native": {}
+        },
+        {
+            "_id": "info.connection",
+            "type": "state",
+            "common": {
+                "role": "indicator.connected",
+                "name": "Device or service connected",
+                "type": "boolean",
+                "read": true,
+                "write": false,
+                "def": false
+            },
+            "native": {}
+        }
+    ]
+}
