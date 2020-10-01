@@ -47,8 +47,11 @@ which requires `libcap2-bin` to be installed.
 
 ## Changelog
 
+### 0.0.2
+* (mrbungle64) Improved reliability
+
 ### 0.0.1
-* (mrbungle64) initial release
+* (mrbungle64) Initial release
 
 ## License
 MIT License
