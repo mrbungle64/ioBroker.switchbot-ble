@@ -8,7 +8,6 @@ This adapter allows you to control your SwitchBot "Bot" and to monitor the tempe
 * This adapter doesn't support Hub Plus/Mini
 * It only supports "SwitchBot Bot" and "SwitchBot Meter" over Bluetooth (BLE)
 * Controlling "SwitchBot Bot" isn't stable yet (see known issues)
-* The "SwitchBot Meter" isn't tested yet but should work anyway
 
 ## Dependencies
 * [Node.js](https://nodejs.org/en/) 10 +
@@ -35,9 +34,7 @@ which requires `libcap2-bin` to be installed.
 
 ### Supported models
 * SwitchBot "Bot"
-
-### These models should work
-* SwitchBot "Meter" (Thermometer & Hygrometer)
+* SwitchBot "Meter"
 
 ## Known issues
 
