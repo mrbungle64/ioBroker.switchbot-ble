@@ -19,7 +19,8 @@
     "@iobroker/adapter-core": "^2.4.0",
     "switchbot": "^0.0.4",
     "node-switchbot": "^0.1.0",
-    "@abandonware/noble": "^1.9.2-10"
+    "@abandonware/noble": "^1.9.2-10",
+    "@abandonware/bluetooth-hci-socket": "^0.5.3-6"
   },
   "devDependencies": {
     "@iobroker/testing": "^2.3.0",

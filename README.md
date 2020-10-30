@@ -7,7 +7,7 @@ This adapter allows you to control your SwitchBot "Bot" and to monitor the tempe
 ## Before you install
 * This adapter doesn't support Hub Plus/Mini
 * It only supports "SwitchBot Bot" and "SwitchBot Meter" over Bluetooth (BLE)
-* Controlling "SwitchBot Bot" isn't stable yet (see known issues)
+* Controlling "SwitchBot Bot" isn't 100% stable yet (see known issues)
 
 ## Dependencies
 * [Node.js](https://nodejs.org/en/) 10 +
