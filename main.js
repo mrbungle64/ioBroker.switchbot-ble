@@ -188,6 +188,7 @@ class SwitchbotBle extends utils.Adapter {
             this.setStateConditional(data.address + '.deviceInfo.model', data.serviceData.model, true);
             this.setStateConditional(data.address + '.deviceInfo.battery', data.serviceData.battery, true);
             if (data.serviceData.model === 'H') {
+                // SwitchBot Bot
                 this.setStateConditional(data.address + '.deviceInfo.switchMode', data.serviceData.mode, true);
                 if (data.serviceData.mode === true) {
                     this.setStateConditional(data.address + '.deviceInfo.state', data.serviceData.state, true);
@@ -195,8 +196,14 @@ class SwitchbotBle extends utils.Adapter {
                     this.setStateConditional(data.address + '.on', this.switchbotDevice[data.address]['on'], true);
                 }
             } else if (data.serviceData.model === 'T') {
+                // SwitchBot Meter
                 this.setStateConditional(data.address + '.temperature', data.serviceData.temperature.c, true);
                 this.setStateConditional(data.address + '.humidity', data.serviceData.humidity, true);
+            } else if (data.serviceData.model === 'c') {
+                // SwitchBot Curtain
+                this.setStateConditional(data.address + '.calibration', data.serviceData.calibration, true);
+                this.setStateConditional(data.address + '.position', data.serviceData.position, true);
+                this.setStateConditional(data.address + '.lightLevel', data.serviceData.lightLevel, true);
             }
         }
     }
