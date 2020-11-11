@@ -44,11 +44,14 @@ which requires `libcap2-bin` to be installed.
 
 ## Changelog
 
+### 0.0.3
+* Initial support for SwitchBot Curtain
+
 ### 0.0.2
-* (mrbungle64) Improved reliability
+* Improved reliability
 
 ### 0.0.1
-* (mrbungle64) Initial release
+* Initial release
 
 ## License
 MIT License
