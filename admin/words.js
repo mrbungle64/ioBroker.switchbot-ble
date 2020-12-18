@@ -16,14 +16,10 @@ const systemDictionary = {
     },
     'interval': {
         'en': 'Interval (seconds)',
-        'de': 'Interval (Sekunden)',
-        'ru': 'Interval',
-        'pt': 'Interval',
-        'nl': 'Interval',
-        'fr': 'Interval',
-        'it': 'Interval',
-        'es': 'Interval',
-        'pl': 'Interval',
-        'zh-cn': 'Interval'
+        'de': 'Interval (Sekunden)'
+    },
+    'scanDevicesWait': {
+        'en': 'Wait for devices (seconds)',
+        'de': 'Auf Geräte warten (Sekunden)',
     }
 };

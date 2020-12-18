@@ -20,6 +20,7 @@ class SwitchbotBle extends utils.Adapter {
         this.on('unload', this.onUnload.bind(this));
         this.interval = null;
         this.timeout = null;
+        this.scanDevicesWait = this.config.scanDevicesWait ? this.config.scanDevicesWait : 3000;
         this.inverseOnOff = [];
         this.switchbotDevice = [];
         this.intervalNextCmd = {
@@ -95,7 +96,7 @@ class SwitchbotBle extends utils.Adapter {
         this.log.debug('[execNextCmd] cmd: ' + cmd);
         switch (cmd) {
             case 'scanDevices':
-                await this.scanDevices();
+                await this.scanDevices(this.scanDevicesWait);
                 break;
             case 'press':
             case 'turnOn':
