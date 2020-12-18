@@ -71,9 +71,11 @@ class SwitchbotBle extends utils.Adapter {
     }
 
     setNextInterval(cmd, interval, device = null) {
+        this.log.debug('[setNextInterval] cmd: ' + cmd);
         this.intervalNextCmd['cmd'] = cmd;
         this.intervalNextCmd['macAddress'] = device;
         if (this.intervalNextCmd['interval'] !== interval) {
+            this.log.debug('[setNextInterval] interval: ' + interval);
             this.intervalNextCmd['interval'] = interval;
             if (this.interval) {
                 clearInterval(this.interval);
@@ -90,6 +92,7 @@ class SwitchbotBle extends utils.Adapter {
     async execNextCmd() {
         const macAddress = this.intervalNextCmd['macAddress'];
         const cmd = this.intervalNextCmd['cmd'];
+        this.log.debug('[execNextCmd] cmd: ' + cmd);
         switch (cmd) {
             case 'scanDevices':
                 await this.scanDevices();
@@ -175,6 +178,7 @@ class SwitchbotBle extends utils.Adapter {
             }
             this.setStates(data);
         };
+        this.log.debug('[scanDevices] setNextInterval: ' + setNextInterval);
         if (setNextInterval) {
             this.setNextInterval('scanDevices', this.config.interval, null);
         }
