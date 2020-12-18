@@ -76,8 +76,8 @@
         ]
     },
     "native": {
-        "interval": 15000,
-        "scanDevicesWait": 3000
+        "interval": "",
+        "scanDevicesWait": ""
     },
     "objects": [],
     "instanceObjects": [

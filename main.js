@@ -20,7 +20,7 @@ class SwitchbotBle extends utils.Adapter {
         this.on('unload', this.onUnload.bind(this));
         this.interval = null;
         this.timeout = null;
-        this.scanDevicesWait = 3000;
+        this.scanDevicesWait = null;
         this.inverseOnOff = [];
         this.switchbotDevice = [];
         this.intervalNextCmd = {
@@ -32,9 +32,7 @@ class SwitchbotBle extends utils.Adapter {
 
     async onReady() {
         this.setState('info.connection', false, true);
-        if (this.config.scanDevicesWait) {
-            this.scanDevicesWait = this.config.scanDevicesWait;
-        }
+        this.scanDevicesWait = this.config.scanDevicesWait ? parseInt(this.config.scanDevicesWait) : 3000;
         this.setNextInterval('scanDevices', 250);
         this.subscribeStates('*');
     }
@@ -99,7 +97,7 @@ class SwitchbotBle extends utils.Adapter {
         this.log.debug('[execNextCmd] cmd: ' + cmd);
         switch (cmd) {
             case 'scanDevices':
-                await this.scanDevices(this.scanDevicesWait);
+                await this.scanDevices();
                 break;
             case 'press':
             case 'turnOn':
@@ -157,10 +155,10 @@ class SwitchbotBle extends utils.Adapter {
         });
     }
 
-    async scanDevices(wait = 2500, setNextInterval = true) {
+    async scanDevices(setNextInterval = true) {
         const nodeSwitchbot = new NodeSwitchbot();
         nodeSwitchbot.startScan().then(() => {
-            return nodeSwitchbot.wait(wait);
+            return nodeSwitchbot.wait(this.scanDevicesWait);
         }).then(() => {
             nodeSwitchbot.stopScan();
         }).catch((error) => {
