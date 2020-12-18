@@ -20,7 +20,7 @@ class SwitchbotBle extends utils.Adapter {
         this.on('unload', this.onUnload.bind(this));
         this.interval = null;
         this.timeout = null;
-        this.scanDevicesWait = this.config.scanDevicesWait ? this.config.scanDevicesWait : 3000;
+        this.scanDevicesWait = 3000;
         this.inverseOnOff = [];
         this.switchbotDevice = [];
         this.intervalNextCmd = {
@@ -32,6 +32,9 @@ class SwitchbotBle extends utils.Adapter {
 
     async onReady() {
         this.setState('info.connection', false, true);
+        if (this.config.scanDevicesWait) {
+            this.scanDevicesWait = this.config.scanDevicesWait;
+        }
         this.setNextInterval('scanDevices', 250);
         this.subscribeStates('*');
     }
