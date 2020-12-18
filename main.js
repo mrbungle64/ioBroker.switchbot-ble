@@ -20,6 +20,7 @@ class SwitchbotBle extends utils.Adapter {
         this.on('unload', this.onUnload.bind(this));
         this.interval = null;
         this.timeout = null;
+        this.cmdInterval = null;
         this.scanDevicesWait = null;
         this.inverseOnOff = [];
         this.switchbotDevice = [];
@@ -32,6 +33,7 @@ class SwitchbotBle extends utils.Adapter {
 
     async onReady() {
         this.setState('info.connection', false, true);
+        this.cmdInterval = this.config.interval ? parseInt(this.config.interval) : 15000;
         this.scanDevicesWait = this.config.scanDevicesWait ? parseInt(this.config.scanDevicesWait) : 3000;
         this.setNextInterval('scanDevices', 250);
         this.subscribeStates('*');
@@ -118,7 +120,7 @@ class SwitchbotBle extends utils.Adapter {
                 case 'turnOn':
                     if (on === true) {
                         this.log.info(`device already turned on`);
-                        this.setNextInterval('scanDevices', this.config.interval, null);
+                        this.setNextInterval('scanDevices', this.cmdInterval, null);
                         return;
                     }
                     await switchbot.turnOn();
@@ -130,7 +132,7 @@ class SwitchbotBle extends utils.Adapter {
                 case 'turnOff':
                     if (on === false) {
                         this.log.info(`device already turned off`);
-                        this.setNextInterval('scanDevices', this.config.interval, null);
+                        this.setNextInterval('scanDevices', this.cmdInterval, null);
                         return;
                     }
                     await switchbot.turnOff();
@@ -182,7 +184,7 @@ class SwitchbotBle extends utils.Adapter {
         };
         this.log.debug('[scanDevices] setNextInterval: ' + setNextInterval);
         if (setNextInterval) {
-            this.setNextInterval('scanDevices', this.config.interval, null);
+            this.setNextInterval('scanDevices', this.cmdInterval, null);
         }
     }
 
