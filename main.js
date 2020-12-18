@@ -26,7 +26,7 @@ class SwitchbotBle extends utils.Adapter {
         this.switchbotDevice = [];
         this.intervalNextCmd = {
             'cmd': null,
-            'deviceAddress': null,
+            'macAddress': null,
             'interval': null
         };
     }
@@ -113,7 +113,7 @@ class SwitchbotBle extends utils.Adapter {
                 await this.deviceAction(cmd, macAddress);
                 break;
             default:
-                await this.scanDevices();
+                this.log.debug('[execNextCmd] unknown cmd: ' + cmd);
         }
     }
 
@@ -158,8 +158,7 @@ class SwitchbotBle extends utils.Adapter {
                     this.log.debug(`Unhandled control cmd: ${macAddress}`);
             }
         })().catch((error) => {
-            this.log.debug(`Error deviceAction: ${error}`);
-            this.setNextInterval(cmd, 1000, macAddress);
+            this.log.error(`Error deviceAction: ${error}`);
         });
     }
 
