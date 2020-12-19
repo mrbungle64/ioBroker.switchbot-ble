@@ -164,6 +164,7 @@ class SwitchbotBle extends utils.Adapter {
             }
         })().catch(() => {
             this.log.warn(`Error deviceAction: ${cmd}`);
+            this.setNextInterval(cmd, this.retryDelay, macAddress);
         });
     }
 

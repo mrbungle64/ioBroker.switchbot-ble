@@ -38,7 +38,7 @@
             });
             onChange(false);
             // reinitialize all the Materialize labels on the page if you are dynamically adding inputs:
-            if (M) M.updateTextFields();
+            M.updateTextFields();
         }
 
         // This will be called by the admin adapter when the user presses the save button
@@ -88,12 +88,12 @@
             </div>
             <div class="input-field col s12 m6 l3">
                 <select id="retryDelay" class="value">
-                    <option value="50" class="translate">50</option>
                     <option value="100" class="translate">100</option>
-                    <option value="200" class="translate">200</option>
-                    <option value="300" class="translate">300</option>
-                    <option value="400" class="translate">400</option>
+                    <option value="250" class="translate">250</option>
                     <option value="500" class="translate">500</option>
+                    <option value="750" class="translate">750</option>
+                    <option value="1000" class="translate">1000</option>
+                    <option value="2000" class="translate">2000</option>
                 </select>
                 <label class="translate label">retryDelay</label>
             </div>
