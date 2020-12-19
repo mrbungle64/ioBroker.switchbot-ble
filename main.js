@@ -22,6 +22,7 @@ class SwitchbotBle extends utils.Adapter {
         this.timeout = null;
         this.cmdInterval = null;
         this.scanDevicesWait = null;
+        this.retryDelay = null;
         this.inverseOnOff = [];
         this.switchbotDevice = [];
         this.intervalNextCmd = {
@@ -40,6 +41,10 @@ class SwitchbotBle extends utils.Adapter {
         this.scanDevicesWait = 3000;
         if ((this.config.scanDevicesWait) && (parseInt(this.config.scanDevicesWait) > 0)) {
             this.scanDevicesWait = parseInt(this.config.scanDevicesWait);
+        }
+        this.retryDelay = 100;
+        if ((this.config.retryDelay) && (parseInt(this.config.retryDelay) > 0)) {
+            this.retryDelay = parseInt(this.config.retryDelay);
         }
         this.setNextInterval('scanDevices', 250);
         this.subscribeStates('*');
@@ -133,7 +138,7 @@ class SwitchbotBle extends utils.Adapter {
                     this.setStateConditional(macAddress + '.on', true, true);
                     this.switchbotDevice[macAddress]['on'] = true;
                     this.log.info(`device ${macAddress} turned on`);
-                    this.setNextInterval('scanDevices', 50, macAddress);
+                    this.setNextInterval('scanDevices', this.retryDelay, macAddress);
                     break;
                 case 'turnOff':
                     if (on === false) {
@@ -145,20 +150,20 @@ class SwitchbotBle extends utils.Adapter {
                     this.setStateConditional(macAddress + '.on', false, true);
                     this.switchbotDevice[macAddress]['on'] = false;
                     this.log.info(`device ${macAddress} turned off`);
-                    this.setNextInterval('scanDevices', 50, macAddress);
+                    this.setNextInterval('scanDevices', this.retryDelay, macAddress);
                     break;
                 case 'press':
                     await switchbot.press();
                     this.setStateConditional(macAddress + '.on', !on, true);
                     this.switchbotDevice[macAddress]['on'] = !on;
                     this.log.info(`device ${macAddress} pressed`);
-                    this.setNextInterval('scanDevices', 50, macAddress);
+                    this.setNextInterval('scanDevices', this.retryDelay, macAddress);
                     break;
                 default:
                     this.log.debug(`Unhandled control cmd: ${macAddress}`);
             }
-        })().catch((error) => {
-            this.log.error(`Error deviceAction: ${error}`);
+        })().catch(() => {
+            this.log.warn(`Error deviceAction: ${cmd}`);
         });
     }
 

@@ -15,11 +15,15 @@ const systemDictionary = {
         'zh-cn': 'switchbot-ble的适配器设置'
     },
     'interval': {
-        'en': 'Interval (seconds)',
-        'de': 'Interval (Sekunden)'
+        'en': 'Interval for scanning devices (seconds)',
+        'de': 'Intervall für die Gerätesuche (Sekunden)'
     },
     'scanDevicesWait': {
-        'en': 'Wait for devices (seconds)',
-        'de': 'Auf Geräte warten (Sekunden)',
+        'en': 'Wait while scanning devices (seconds)',
+        'de': 'Wartezeit während der Gerätesuche (Sekunden)',
+    },
+    'retryDelay': {
+        'en': 'Delay while retrying to  (milliseconds)',
+        'de': 'Auf Geräte warten (Millisekunden)',
     }
 };
