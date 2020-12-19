@@ -1,7 +1,8 @@
 /*global systemDictionary:true */
 'use strict';
 
-const systemDictionary = {
+// @ts-ignore
+systemDictionary = {
     'switchbot-ble adapter settings': {
         'en': 'Adapter settings for switchbot-ble',
         'de': 'Adaptereinstellungen für switchbot-ble',
