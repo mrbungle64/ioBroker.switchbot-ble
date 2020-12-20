@@ -163,7 +163,7 @@ class SwitchbotBle extends utils.Adapter {
                     this.log.debug(`Unhandled control cmd: ${macAddress}`);
             }
         })().catch(() => {
-            this.log.warn(`Error deviceAction: ${cmd}`);
+            this.log.warn(`Error while deviceAction ${cmd}. Will try again in ${this.retryDelay} milliseconds ...`);
             this.setNextInterval(cmd, this.retryDelay, macAddress);
         });
     }
