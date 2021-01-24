@@ -11,7 +11,7 @@
         "title": "SwitchBot BLE",
         "titleLang": {
             "en": "SwitchBot BLE",
-            "de": "SwitchBot BLE",
+            "de": "SwitchBot BLE"
         },
         "desc": {
             "en": "This adapter allows you to move your Switchbot Bot's arm and to monitor the Thermometer & Hygrometer (Meter)",
