@@ -44,6 +44,9 @@ which requires `libcap2-bin` to be installed.
 
 ## Changelog
 
+### 0.2.0
+* Bump node-switchbot to 1.0.0
+
 ### 0.0.1 - 0.1.0
 * Support for SwitchBot Bot and Meter
 * Initial support for SwitchBot Curtain
