@@ -44,17 +44,9 @@ which requires `libcap2-bin` to be installed.
 
 ## Changelog
 
-### 0.0.4 - 0.0.6
-* Several enhancements and fixes
-
-### 0.0.3
+### 0.0.1 - 0.1.0
+* Support for SwitchBot Bot and Meter
 * Initial support for SwitchBot Curtain
-
-### 0.0.2
-* Improved reliability
-
-### 0.0.1
-* Initial release
 
 ## License
 MIT License
