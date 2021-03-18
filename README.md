@@ -24,6 +24,8 @@ Before installing the adapter, some linux libraries related Bluetooth as follows
 $ sudo apt-get install bluetooth bluez libbluetooth-dev libudev-dev
 ```
 
+See the documentation of [@abandonware/noble](https://github.com/abandonware/noble#readme) for other operating systems details.
+
 If the adapter starts but won't connect to your bluetooth hardware, you need to give `node` additional permissions:
 ```bash
 sudo setcap cap_net_raw+eip $(eval readlink -f `which node`)
@@ -54,7 +56,7 @@ which requires `libcap2-bin` to be installed.
 ## License
 MIT License
 
-Copyright (c) 2020 Sascha Hölzel <mrb1232@posteo.de>
+Copyright (c) 2021 Sascha Hölzel <mrb1232@posteo.de>
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
