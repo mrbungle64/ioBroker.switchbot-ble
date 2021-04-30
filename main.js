@@ -205,6 +205,7 @@ class SwitchbotBle extends utils.Adapter {
             this.setStateConditional(data.address + '.deviceInfo.rssi', data.rssi, true);
             this.setStateConditional(data.address + '.deviceInfo.id', data.id, true);
             this.setStateConditional(data.address + '.deviceInfo.model', data.serviceData.model, true);
+            this.setStateConditional(data.address + '.deviceInfo.modelName', data.serviceData.modelName, true);
             this.setStateConditional(data.address + '.deviceInfo.battery', data.serviceData.battery, true);
             if (data.serviceData.model === 'H') {
                 // SwitchBot Bot
