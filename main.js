@@ -251,6 +251,10 @@ class SwitchbotBle extends utils.Adapter {
         await objects.createBotObjects(this, object);
     }
 
+    async createDeviceNotExists(id, name) {
+        await objects.createDeviceNotExists(this, id, name);
+    }
+
     async createChannelNotExists(id, name) {
         await objects.createChannelNotExists(this, id, name);
     }
