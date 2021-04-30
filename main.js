@@ -218,6 +218,7 @@ class SwitchbotBle extends utils.Adapter {
             } else if (data.serviceData.model === 'T') {
                 // SwitchBot Meter
                 this.setStateConditional(data.address + '.temperature', data.serviceData.temperature.c, true);
+                this.setStateConditional(data.address + '.temperatureF', data.serviceData.temperature.f, true);
                 this.setStateConditional(data.address + '.humidity', data.serviceData.humidity, true);
             } else if (data.serviceData.model === 'c') {
                 // SwitchBot Curtain
