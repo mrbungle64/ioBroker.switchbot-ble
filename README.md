@@ -46,6 +46,9 @@ which requires `libcap2-bin` to be installed.
 
 ## Changelog
 
+### 0.2.1
+* Bump node-switchbot to 1.0.3
+
 ### 0.2.0
 * Bump node-switchbot to 1.0.0
 
