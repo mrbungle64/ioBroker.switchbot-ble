@@ -40,11 +40,14 @@ which requires `libcap2-bin` to be installed.
 
 ## Known issues
 
-* "press", "turnOn" and "turnOff" from SwitchBot "Bot" sometimes not working.
-  * There's no solution for this yet, because there's mostly no error message. It just doesn't move the arm.
-  * When using [node-switchbot](https://github.com/futomi/node-switchbot) for controlling the "Bot" the connection is even more unstable.
+* "press", "turnOn" and "turnOff" from SwitchBot "Bot" sometimes not working
+  * There's no solution for this yet, because there's mostly no error message. It just doesn't move the arm
+  * However, it may be that in many cases it still works without any issues
 
 ## Changelog
+
+### 0.2.2
+* Bump node-switchbot to 1.0.6
 
 ### 0.2.1
 * Bump node-switchbot to 1.0.3
