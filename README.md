@@ -38,6 +38,13 @@ which requires `libcap2-bin` to be installed.
 * SwitchBot "Bot"
 * SwitchBot "Meter"
 
+#### Other models (untested)
+
+* SwitchBot "Curtain" (read-only)
+
+States should also be generated for other models (e.g. Contact Sensor, Humidifier),
+but they are also read-only and only contain information about the battery level and model.
+
 ## Known issues
 
 * "press", "turnOn" and "turnOff" from SwitchBot "Bot" sometimes not working
