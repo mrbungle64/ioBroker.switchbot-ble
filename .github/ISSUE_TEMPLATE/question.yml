@@ -6,7 +6,7 @@ body:
     attributes:
       value: |
         This issue form is for questions only!
-        If you have a problem or a feature request, please use one of the other templates.
+        If you have a problem please use the template for bug reports.
   - type: textarea
     validations:
       required: true

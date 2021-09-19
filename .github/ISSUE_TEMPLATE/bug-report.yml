@@ -6,7 +6,7 @@ body:
     attributes:
       value: |
         This issue form is for reporting bugs or problems only!
-        If you have a feature request or a question, please use one of the other templates.
+        If you have a question, please use the template for questions.
   - type: checkboxes
     attributes:
       label: Is there an existing issue for this?
