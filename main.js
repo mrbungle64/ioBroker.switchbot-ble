@@ -178,6 +178,10 @@ class SwitchbotBle extends utils.Adapter {
             this.log.error(`error: ${error}`);
         });
 
+        nodeSwitchbot.ondiscover = (device) => {
+            this.log.info('New device found: ' + device.id + ' (' + device.modelName + ')');
+        };
+
         nodeSwitchbot.onadvertisement = (data) => {
             if (!this.switchbotDevice[data.address]) {
                 (async () => {
