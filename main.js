@@ -179,7 +179,7 @@ class SwitchbotBle extends utils.Adapter {
         });
 
         nodeSwitchbot.ondiscover = (device) => {
-            this.log.info('New device found: ' + device.id + ' (' + device.modelName + ')');
+            this.log.info('New device discovered: ' + device.id + ' (' + device.modelName + ')');
         };
 
         nodeSwitchbot.onadvertisement = (data) => {
@@ -188,7 +188,7 @@ class SwitchbotBle extends utils.Adapter {
                     await this.createBotObjects(data);
                 })().catch(() => {});
                 this.switchbotDevice[data.address] = data;
-                this.log.info(`Detected device: ${data.address}`);
+                this.log.info(`Device detected: ${data.address}`);
                 this.getState(data.address + '.control.inverseOnOff', (err, state) => {
                     if (!err && state) {
                         this.inverseOnOff[data.address] = state.val;
