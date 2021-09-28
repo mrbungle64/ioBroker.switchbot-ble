@@ -5,19 +5,27 @@
 This adapter allows you to control your SwitchBot "Bot" and to monitor the temperature/humidity from SwitchBot "Meter".
 
 ## Before you install
+
 * This adapter doesn't support Hub Plus/Mini
 * It only supports "SwitchBot Bot" and "SwitchBot Meter" over Bluetooth (BLE)
 * Controlling "SwitchBot Bot" isn't 100% stable yet (see known issues)
 
 ## Dependencies
+
 * [Node.js](https://nodejs.org/en/) 10 +
 * [switchbot](https://github.com/ukiuni/Switchbot) for moving the arm from SwitchBot "Bot"
 * [node-switchbot](https://github.com/futomi/node-switchbot) for monitoring the states of your SwitchBot "Bot" and "Meter"
 
 ## Supported OS
+
 [node-switchbot](https://github.com/futomi/node-switchbot) currently supports only Linux-based OSes, such as Raspbian, Ubuntu, and so on.
 
 ## Installation
+
+It is recommended to use version 12.x or 14.x of Node.js.
+
+The minimum required version is still 10.x, **but that will change soon**.
+
 Before installing the adapter, some linux libraries related Bluetooth as follows if the OS is Ubuntu/Debian/Raspbian.
 
 ```
@@ -35,6 +43,7 @@ which requires `libcap2-bin` to be installed.
 ## Models
 
 ### Supported models
+
 * SwitchBot "Bot"
 * SwitchBot "Meter"
 

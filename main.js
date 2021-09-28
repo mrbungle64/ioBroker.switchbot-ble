@@ -34,18 +34,16 @@ class SwitchbotBle extends utils.Adapter {
 
     async onReady() {
         this.setState('info.connection', false, true);
-        this.cmdInterval = 15000;
-        if ((this.config.interval) && (parseInt(this.config.interval) > 0)) {
-            this.cmdInterval = parseInt(this.config.interval);
-        }
-        this.scanDevicesWait = 3000;
-        if ((this.config.scanDevicesWait) && (parseInt(this.config.scanDevicesWait) > 0)) {
-            this.scanDevicesWait = parseInt(this.config.scanDevicesWait);
-        }
-        this.retryDelay = 100;
-        if ((this.config.retryDelay) && (parseInt(this.config.retryDelay) > 0)) {
-            this.retryDelay = parseInt(this.config.retryDelay);
-        }
+
+        const interval = Number(this.config.interval);
+        this.cmdInterval = interval || 15000;
+
+        const scanDevicesWait = Number(this.config.scanDevicesWait);
+        this.scanDevicesWait = scanDevicesWait || 3000;
+
+        const retryDelay = Number(this.config.retryDelay);
+        this.retryDelay = retryDelay || 100;
+
         this.setNextInterval('scanDevices', 250);
         this.subscribeStates('*');
     }
@@ -178,10 +176,6 @@ class SwitchbotBle extends utils.Adapter {
         }).catch((error) => {
             this.log.error(`error: ${error}`);
         });
-
-        nodeSwitchbot.ondiscover = (device) => {
-            this.log.info('New device discovered: ' + device.id + ' (' + device.modelName + ')');
-        };
 
         nodeSwitchbot.onadvertisement = (data) => {
             if (!this.switchbotDevice[data.address]) {
