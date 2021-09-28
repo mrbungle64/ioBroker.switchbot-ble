@@ -37,14 +37,17 @@ class SwitchbotBle extends utils.Adapter {
 
         const interval = Number(this.config.interval);
         this.cmdInterval = interval || 15000;
+        this.log.debug(`Init cmdInterval: ${this.cmdInterval}`);
 
         const scanDevicesWait = Number(this.config.scanDevicesWait);
         this.scanDevicesWait = scanDevicesWait || 3000;
+        this.log.debug(`Init scanDevicesWait: ${this.scanDevicesWait}`);
 
         const retryDelay = Number(this.config.retryDelay);
-        this.retryDelay = retryDelay || 100;
+        this.retryDelay = retryDelay || 250;
+        this.log.debug(`Init retryDelay: ${this.retryDelay}`);
 
-        this.setNextInterval('scanDevices', 250);
+        this.setNextInterval('scanDevices', this.retryDelay);
         this.subscribeStates('*');
     }
 
