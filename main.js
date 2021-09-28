@@ -162,8 +162,9 @@ class SwitchbotBle extends utils.Adapter {
                 default:
                     this.log.debug(`Unhandled control cmd: ${macAddress}`);
             }
-        })().catch(() => {
-            this.log.warn(`Error while deviceAction ${cmd}. Will try again in ${this.retryDelay} milliseconds ...`);
+        })().catch((error) => {
+            this.log.warn(`Error while running deviceAction ${cmd}: ${error}`);
+            this.log.warn(`Will try again in ${this.retryDelay} milliseconds ...`);
             this.setNextInterval(cmd, this.retryDelay, macAddress);
         });
     }
@@ -186,7 +187,9 @@ class SwitchbotBle extends utils.Adapter {
             if (!this.switchbotDevice[data.address]) {
                 (async () => {
                     await this.createBotObjects(data);
-                })().catch(() => {});
+                })().catch((error) => {
+                    this.log.error(`Error while creating objects: ${error}`);
+                });
                 this.switchbotDevice[data.address] = data;
                 this.log.info(`Device detected: ${data.address}`);
                 this.getState(data.address + '.control.inverseOnOff', (err, state) => {
