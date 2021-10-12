@@ -60,6 +60,17 @@ but they are also read-only and only contain information about the battery level
   * There's no solution for this yet, because there's mostly no error message. It just doesn't move the arm
   * However, it may be that in many cases it still works without any issues
 
+## Troubleshooting
+
+If the adapter no longer works, e.g. after a restart or system update, please try the following:
+
+```bash
+cd /opt/iobroker/node_modules/iobroker.switchbot-ble/
+sudo rm -r node_modules/
+npm install
+sudo setcap cap_net_raw+eip $(eval readlink -f `which node`)
+```
+
 ## Changelog
 
 ### 0.2.2
