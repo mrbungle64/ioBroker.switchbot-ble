@@ -131,7 +131,7 @@ class SwitchbotBle extends utils.Adapter {
             switch (cmd) {
                 case 'turnOn':
                     if (on === true) {
-                        this.log.info(`device already turned on`);
+                        this.log.info(`device ${macAddress} already turned on`);
                         this.setNextInterval('scanDevices', this.cmdInterval, null);
                         return;
                     }
@@ -143,7 +143,7 @@ class SwitchbotBle extends utils.Adapter {
                     break;
                 case 'turnOff':
                     if (on === false) {
-                        this.log.info(`device already turned off`);
+                        this.log.info(`device ${macAddress} already turned off`);
                         this.setNextInterval('scanDevices', this.cmdInterval, null);
                         return;
                     }
@@ -163,9 +163,8 @@ class SwitchbotBle extends utils.Adapter {
                 default:
                     this.log.debug(`Unhandled control cmd: ${macAddress}`);
             }
-        })().catch((error) => {
-            this.log.warn(`Error while running deviceAction ${cmd}: ${error}`);
-            this.log.warn(`Will try again in ${this.retryDelay} milliseconds ...`);
+        })().catch(() => {
+            this.log.warn(`DeviceAction ${cmd} was not successful. Will try again in ${this.retryDelay} milliseconds ...`);
             this.setNextInterval(cmd, this.retryDelay, macAddress);
         });
     }
