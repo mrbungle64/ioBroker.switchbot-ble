@@ -7,18 +7,12 @@ This adapter allows you to control your SwitchBot "Bot" and to monitor the tempe
 ## Before you install
 
 * This adapter doesn't support Hub Plus/Mini
-* It only supports "SwitchBot Bot" and "SwitchBot Meter" over Bluetooth (BLE)
-* Controlling "SwitchBot Bot" isn't 100% stable yet (see known issues)
-
-## Dependencies
-
-* [Node.js](https://nodejs.org/en/) 10 +
-* [switchbot](https://github.com/ukiuni/Switchbot) for moving the arm from SwitchBot "Bot"
-* [node-switchbot](https://github.com/futomi/node-switchbot) for monitoring the states of your SwitchBot "Bot" and "Meter"
+* It only supports SwitchBot "Bot" and "Meter" over Bluetooth (BLE)
+* Controlling SwitchBot "Bot" isn't 100% stable yet (see known issues)
 
 ## Supported OS
 
-[node-switchbot](https://github.com/futomi/node-switchbot) currently supports only Linux-based OSes, such as Raspbian, Ubuntu, and so on.
+This adapter may only run on Linux-based operating systems, as the underlying library [node-switchbot](https://github.com/OpenWonderLabs/node-switchbot#supported-os) currently only supports Linux-based operating systems such as Raspbian and Ubuntu.
 
 ## Installation
 
