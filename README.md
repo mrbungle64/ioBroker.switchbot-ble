@@ -2,13 +2,13 @@
 
 # Switchbot (BLE) adapter for ioBroker
 
-This adapter allows you to control your SwitchBot "Bot" and to monitor the temperature/humidity from SwitchBot "Meter".
+This adapter allows you to control your SwitchBot "Bot" and to monitor the temperature/humidity from SwitchBot "Meter" via Bluetooth (BLE).
 
 ## Before you install
 
-* This adapter doesn't support Hub Plus/Mini
-* It only supports SwitchBot "Bot" and "Meter" over Bluetooth (BLE)
-* Controlling SwitchBot "Bot" isn't 100% stable yet (see known issues)
+* It only supports SwitchBot "Bot" and "Meter" via Bluetooth (BLE)
+* Controlling SwitchBot "Bot" may not be 100% stable (see known issues)
+* If you are looking for Hub Plus/Mini support, [this adapter](https://github.com/DrozmotiX/ioBroker.switchbot-hub) is what you will need
 
 ## Supported OS
 
