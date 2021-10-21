@@ -21,6 +21,9 @@
     "node-switchbot": "1.0.6",
     "@abandonware/noble": "1.9.2-14"
   },
+  "engines": {
+    "node": ">=12"
+  },
   "devDependencies": {
     "@iobroker/testing": "^2.5.2",
     "@types/chai": "^4.2.22",
