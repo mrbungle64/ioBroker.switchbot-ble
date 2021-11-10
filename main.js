@@ -224,6 +224,7 @@ class SwitchbotBle extends utils.Adapter {
             this.setStateConditional(data.address + '.deviceInfo.id', data.id, true);
             this.setStateConditional(data.address + '.deviceInfo.model', data.serviceData.model, true);
             this.setStateConditional(data.address + '.deviceInfo.modelName', data.serviceData.modelName, true);
+            this.setStateConditional(data.address + '.deviceInfo.productName', this.getProductName(data.serviceData.model), true);
             this.setStateConditional(data.address + '.deviceInfo.battery', data.serviceData.battery, true);
             if (data.serviceData.model === 'H') {
                 // SwitchBot Bot (WoHand)
@@ -281,6 +282,23 @@ class SwitchbotBle extends utils.Adapter {
 
     async createObjectNotExists(id, name, type, role, write, def, unit) {
         await objects.createObjectNotExists(this, id, name, type, role, write, def, unit);
+    }
+
+    getProductName(model) {
+        if (model === 'H') { // WoHand
+            return 'SwitchBot Bot';
+        } else if (model === 'e') { // WoHumi
+            return 'SwitchBot Smart Humidifier';
+        } else if (model === 'T') { // WoSensorTH
+            return 'SwitchBot Meter';
+        } else if (model === 'c') { // WoCurtain
+            return 'SwitchBot Curtain';
+        } else if (model === 's') { // WoMotion
+            return 'SwitchBot Motion Sensor';
+        } else if (model === 'd') { // WoContact
+            return 'SwitchBot Contact Sensor';
+        }
+        return 'unknown';
     }
 }
 
