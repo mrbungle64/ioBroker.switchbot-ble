@@ -241,12 +241,13 @@ class SwitchbotBle extends utils.Adapter {
                 this.setStateConditional(data.address + '.calibration', data.serviceData.calibration, true);
                 this.setStateConditional(data.address + '.position', data.serviceData.position, true);
                 this.setStateConditional(data.address + '.lightLevel', data.serviceData.lightLevel, true);
-            } else if (data.serviceData.model === 'h') {
-                // WoHumi: No additional serviceData implemented in the library yet
-            } else if (data.serviceData.model === 'P') {
-                // WoPresence: No additional serviceData implemented in the library yet
-            } else if (data.serviceData.model === 'C') {
-                // WoContact: No additional serviceData implemented in the library yet
+            } else if (data.serviceData.model === 's') {
+                // WoMotion
+                this.setStateConditional(data.address + '.movement', data.serviceData.movement, true);
+                this.setStateConditional(data.address + '.lightLevel', data.serviceData.lightLevel, true);
+            } else if (data.serviceData.model === 'd') {
+                // WoContact
+                this.setStateConditional(data.address + '.doorState', data.serviceData.doorState, true);
             }
         }
     }
