@@ -17,7 +17,6 @@
   },
   "dependencies": {
     "@iobroker/adapter-core": "^2.5.1",
-    "switchbot": "^0.0.4",
     "node-switchbot": "1.1.2",
     "@abandonware/noble": "1.9.2-15"
   },
