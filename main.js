@@ -138,10 +138,10 @@ class SwitchbotBle extends utils.Adapter {
                     this.setStateConditional(macAddress + '.on', true, true);
                     this.switchbotDevice[macAddress]['on'] = true;
                     this.log.info(`Device ${macAddress} turned on`);
-                    this.setNextInterval('scanDevices', this.retryDelay, macAddress);
                 }).catch((error) => {
-                    this.tryAgain(cmd, macAddress, error);
+                    this.log.warn(`Error while running deviceAction ${cmd} for device ${macAddress}: ${error}`);
                 });
+                this.setNextInterval('scanDevices', this.retryDelay, macAddress);
                 break;
             case 'turnOff':
                 if (on === false) {
@@ -155,10 +155,10 @@ class SwitchbotBle extends utils.Adapter {
                     this.setStateConditional(macAddress + '.on', false, true);
                     this.switchbotDevice[macAddress]['on'] = false;
                     this.log.info(`Device ${macAddress} turned off`);
-                    this.setNextInterval('scanDevices', this.retryDelay, macAddress);
                 }).catch((error) => {
-                    this.tryAgain(cmd, macAddress, error);
+                    this.log.warn(`Error while running deviceAction ${cmd} for device ${macAddress}: ${error}`);
                 });
+                this.setNextInterval('scanDevices', this.retryDelay, macAddress);
                 break;
             case 'press':
                 switchbot.discover({ model: 'H', id: macAddress, quick: false }).then((device_list) => {
@@ -167,20 +167,14 @@ class SwitchbotBle extends utils.Adapter {
                     this.setStateConditional(macAddress + '.on', !on, true);
                     this.switchbotDevice[macAddress]['on'] = !on;
                     this.log.info(`Device ${macAddress} pressed`);
-                    this.setNextInterval('scanDevices', this.retryDelay, macAddress);
                 }).catch((error) => {
-                    this.tryAgain(cmd, macAddress, error);
+                    this.log.warn(`Error while running deviceAction ${cmd} for device ${macAddress}: ${error}`);
                 });
+                this.setNextInterval('scanDevices', this.retryDelay, macAddress);
                 break;
             default:
                 this.log.debug(`Unhandled control cmd ${cmd} for device ${macAddress}`);
         }
-    }
-
-    tryAgain(cmd, macAddress, error) {
-        this.log.warn(`Error while running deviceAction ${cmd} for device ${macAddress}: ${error}`);
-        this.log.warn(`Will try again in ${this.retryDelay} milliseconds ...`);
-        this.setNextInterval(cmd, this.retryDelay, macAddress);
     }
 
     async scanDevices(setNextInterval = true) {
