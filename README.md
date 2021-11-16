@@ -27,12 +27,6 @@ $ sudo apt-get install bluetooth bluez libbluetooth-dev libudev-dev
 
 See the documentation of [@abandonware/noble](https://github.com/abandonware/noble#readme) for other operating systems details.
 
-If the adapter starts but won't connect to your bluetooth hardware, you need to give `node` additional permissions:
-```bash
-sudo setcap cap_net_raw+eip $(eval readlink -f `which node`)
-```
-which requires `libcap2-bin` to be installed.
-
 ## Models
 
 ### Supported models
@@ -61,7 +55,6 @@ If the adapter no longer works, e.g. after a restart or system update, please tr
 cd /opt/iobroker/node_modules/iobroker.switchbot-ble/
 sudo rm -r node_modules/
 npm install
-sudo setcap cap_net_raw+eip $(eval readlink -f `which node`)
 ```
 
 ## Changelog
