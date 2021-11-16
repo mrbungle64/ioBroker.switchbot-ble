@@ -66,6 +66,7 @@
     "native": {
         "interval": "",
         "scanDevicesWait": "",
+        "pressDevicesWait": "",
         "retryDelay": ""
     },
     "objects": [],
