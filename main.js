@@ -118,6 +118,8 @@ class SwitchbotBle extends utils.Adapter {
             case 'scanDevices':
                 await this.scanDevices();
                 break;
+            case 'up':
+            case 'down':
             case 'press':
             case 'turnOn':
             case 'turnOff':
