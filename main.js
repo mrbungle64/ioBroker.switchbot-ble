@@ -29,6 +29,7 @@ class SwitchbotBle extends utils.Adapter {
             'macAddress': null,
             'interval': null
         };
+        this.switchbot = new Switchbot();
     }
 
     async onReady() {
@@ -123,58 +124,63 @@ class SwitchbotBle extends utils.Adapter {
     }
 
     async deviceAction(cmd, macAddress) {
-        const switchbot = new Switchbot();
         const on = this.switchbotDevice[macAddress]['on'];
         switch (cmd) {
             case 'turnOn':
                 if (on === true) {
                     this.log.info(`Device ${macAddress} already turned on`);
                     this.setNextInterval('scanDevices', this.cmdInterval, null);
-                    return;
+                } else {
+                    await this.botAction(cmd, macAddress);
                 }
-                switchbot.discover({ model: 'H', id: macAddress, quick: false }).then((device_list) => {
-                    return device_list[0].turnOn();
-                }).then(() => {
-                    this.setStateConditional(macAddress + '.on', true, true);
-                    this.switchbotDevice[macAddress]['on'] = true;
-                    this.log.info(`Device ${macAddress} turned on`);
-                }).catch((error) => {
-                    this.log.warn(`Error while running deviceAction ${cmd} for device ${macAddress}: ${error}`);
-                });
-                this.setNextInterval('scanDevices', this.retryDelay, macAddress);
                 break;
             case 'turnOff':
                 if (on === false) {
                     this.log.info(`Device ${macAddress} already turned off`);
                     this.setNextInterval('scanDevices', this.cmdInterval, null);
-                    return;
+                } else {
+                    await this.botAction(cmd, macAddress);
                 }
-                switchbot.discover({ model: 'H', id: macAddress, quick: false }).then((device_list) => {
-                    return device_list[0].turnOff();
-                }).then(() => {
-                    this.setStateConditional(macAddress + '.on', false, true);
-                    this.switchbotDevice[macAddress]['on'] = false;
-                    this.log.info(`Device ${macAddress} turned off`);
-                }).catch((error) => {
-                    this.log.warn(`Error while running deviceAction ${cmd} for device ${macAddress}: ${error}`);
-                });
-                this.setNextInterval('scanDevices', this.retryDelay, macAddress);
                 break;
             case 'press':
-                switchbot.discover({ model: 'H', id: macAddress, quick: false }).then((device_list) => {
-                    return device_list[0].turnOff();
-                }).then(() => {
-                    this.setStateConditional(macAddress + '.on', !on, true);
-                    this.switchbotDevice[macAddress]['on'] = !on;
-                    this.log.info(`Device ${macAddress} pressed`);
-                }).catch((error) => {
-                    this.log.warn(`Error while running deviceAction ${cmd} for device ${macAddress}: ${error}`);
-                });
-                this.setNextInterval('scanDevices', this.retryDelay, macAddress);
+                await this.botAction(cmd, macAddress);
                 break;
             default:
                 this.log.debug(`Unhandled control cmd ${cmd} for device ${macAddress}`);
         }
+        this.setNextInterval('scanDevices', this.retryDelay, macAddress);
+    }
+
+    async botAction(cmd, macAddress) {
+        const on = this.switchbotDevice[macAddress]['on'];
+        this.switchbot.discover({model: 'H', id: macAddress, quick: false}).then((device_list) => {
+            switch (cmd) {
+                case 'turnOn':
+                    return device_list[0].turnOn();
+                case 'turnOff':
+                    return device_list[0].turnOff();
+                case 'press':
+                    return device_list[0].press();
+                default:
+                    throw new Error(`Unhandled control cmd ${cmd} for device ${macAddress}`);
+            }
+        }).then(() => {
+            this.switchbotDevice[macAddress]['on'] = !on;
+            this.setStateConditional(macAddress + '.on', this.switchbotDevice[macAddress]['on'], true);
+            switch (cmd) {
+                case 'turnOn':
+                    this.log.info(`Device ${macAddress} turned on`);
+                    break;
+                case 'turnOff':
+                    this.log.info(`Device ${macAddress} turned off`);
+                    break;
+                case 'press':
+                    this.log.info(`Device ${macAddress} pressed`);
+                    break;
+            }
+        }).catch((error) => {
+            this.log.warn(`Error while running deviceAction ${cmd} for device ${macAddress}: ${error}`);
+        });
     }
 
     async scanDevices(setNextInterval = true) {
