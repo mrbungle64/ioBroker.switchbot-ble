@@ -161,7 +161,6 @@ class SwitchbotBle extends utils.Adapter {
     }
 
     async botAction(cmd, macAddress) {
-        const on = this.switchbotDevice[macAddress]['on'];
         this.switchbot.discover({
             id: macAddress,
             model: 'H',
@@ -184,11 +183,11 @@ class SwitchbotBle extends utils.Adapter {
                     throw new Error(`Unhandled control cmd ${cmd} for device ${macAddress}`);
             }
         }).then(() => {
-            this.switchbotDevice[macAddress]['on'] = !on;
-            this.setStateConditional(macAddress + '.on', this.switchbotDevice[macAddress]['on'], true);
+            let on = false;
             switch (cmd) {
                 case 'turnOn':
                     this.log.info(`Device ${macAddress} turned on`);
+                    on = true;
                     break;
                 case 'turnOff':
                     this.log.info(`Device ${macAddress} turned off`);
@@ -196,7 +195,17 @@ class SwitchbotBle extends utils.Adapter {
                 case 'press':
                     this.log.info(`Device ${macAddress} pressed`);
                     break;
+                case 'up':
+                    this.log.info(`Device ${macAddress} pressed up`);
+                    break;
+                case 'down':
+                    this.log.info(`Device ${macAddress} pressed down`);
+                    on = true;
+                    break;
             }
+            this.switchbotDevice[macAddress]['on'] = on;
+            this.setStateConditional(macAddress + '.' + cmd, on, true);
+            this.setStateConditional(macAddress + '.on', on, true);
         }).catch((error) => {
             this.log.warn(`Error while running deviceAction ${cmd} for device ${macAddress}: ${error}`);
         });
