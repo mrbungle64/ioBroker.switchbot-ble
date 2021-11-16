@@ -21,11 +21,26 @@ The minimum required version is 12.x
 
 Before installing the adapter, some linux libraries related Bluetooth as follows if the OS is Ubuntu/Debian/Raspbian.
 
-```
+```bash
 $ sudo apt-get install bluetooth bluez libbluetooth-dev libudev-dev
 ```
 
-See the documentation of [@abandonware/noble](https://github.com/abandonware/noble#readme) for other operating systems details.
+Running without root/sudo (Linux-specific):
+
+```bash
+sudo setcap cap_net_raw+eip $(eval readlink -f `which node`)
+```
+
+This grants the `node` binary `cap_net_raw` privileges, so it can start/stop BLE advertising.
+
+__Note:__ The above command requires `setcap` to be installed.
+It can be installed the following way (e.g. Raspbian and Ubuntu):
+
+```bash
+sudo apt-get install libcap2-bin
+```
+
+See the documentation of [@abandonware/noble](https://github.com/abandonware/noble#readme) for other details.
 
 ## Models
 
@@ -55,6 +70,7 @@ If the adapter no longer works, e.g. after a restart or system update, please tr
 cd /opt/iobroker/node_modules/iobroker.switchbot-ble/
 sudo rm -r node_modules/
 npm install
+sudo setcap cap_net_raw+eip $(eval readlink -f `which node`)
 ```
 
 ## Changelog
