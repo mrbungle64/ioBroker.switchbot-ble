@@ -21,6 +21,7 @@ class SwitchbotBle extends utils.Adapter {
         this.timeout = null;
         this.cmdInterval = null;
         this.scanDevicesWait = null;
+        this.pressDevicesWait = null;
         this.retryDelay = null;
         this.inverseOnOff = [];
         this.switchbotDevice = [];
@@ -42,6 +43,10 @@ class SwitchbotBle extends utils.Adapter {
         const scanDevicesWait = Number(this.config.scanDevicesWait);
         this.scanDevicesWait = scanDevicesWait || 3000;
         this.log.debug(`Init scanDevicesWait: ${this.scanDevicesWait}`);
+
+        const pressDevicesWait = Number(this.config.pressDevicesWait);
+        this.pressDevicesWait = pressDevicesWait || 5000;
+        this.log.debug(`Init pressDevicesWait: ${this.pressDevicesWait}`);
 
         const retryDelay = Number(this.config.retryDelay);
         this.retryDelay = retryDelay || 250;
@@ -153,7 +158,12 @@ class SwitchbotBle extends utils.Adapter {
 
     async botAction(cmd, macAddress) {
         const on = this.switchbotDevice[macAddress]['on'];
-        this.switchbot.discover({model: 'H', id: macAddress, quick: false}).then((device_list) => {
+        this.switchbot.discover({
+            id: macAddress,
+            model: 'H',
+            quick: true,
+            duration: this.pressDevicesWait
+        }).then((device_list) => {
             switch (cmd) {
                 case 'turnOn':
                     return device_list[0].turnOn();
