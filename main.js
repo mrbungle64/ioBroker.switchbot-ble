@@ -148,6 +148,8 @@ class SwitchbotBle extends utils.Adapter {
                 }
                 break;
             case 'press':
+            case 'up':
+            case 'down':
                 await this.botAction(cmd, macAddress);
                 break;
             default:
@@ -164,13 +166,18 @@ class SwitchbotBle extends utils.Adapter {
             quick: true,
             duration: this.pressDevicesWait
         }).then((device_list) => {
+            const bot = device_list[0];
             switch (cmd) {
                 case 'turnOn':
-                    return device_list[0].turnOn();
+                    return bot.turnOn();
                 case 'turnOff':
-                    return device_list[0].turnOff();
+                    return bot.turnOff();
                 case 'press':
-                    return device_list[0].press();
+                    return bot.press();
+                case 'up':
+                    return bot.up();
+                case 'down':
+                    return bot.down();
                 default:
                     throw new Error(`Unhandled control cmd ${cmd} for device ${macAddress}`);
             }
