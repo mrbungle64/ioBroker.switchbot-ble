@@ -66,6 +66,9 @@ sudo setcap cap_net_raw+eip $(eval readlink -f `which node`)
 
 ## Changelog
 
+### 0.3.1
+* Add new option to adapter settings
+
 ### 0.3.0
 * Remove "switchbot" dependency
 * Bump the required Node.js version to 12
