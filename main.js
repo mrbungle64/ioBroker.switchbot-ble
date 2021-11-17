@@ -22,7 +22,6 @@ class SwitchbotBle extends utils.Adapter {
         this.cmdInterval = null;
         this.scanDevicesWait = null;
         this.pressDevicesWait = null;
-        this.retryDelay = null;
         this.inverseOnOff = [];
         this.switchbotDevice = [];
         this.intervalNextCmd = {
@@ -48,11 +47,7 @@ class SwitchbotBle extends utils.Adapter {
         this.pressDevicesWait = pressDevicesWait || 5000;
         this.log.debug(`Init pressDevicesWait: ${this.pressDevicesWait}`);
 
-        const retryDelay = Number(this.config.retryDelay);
-        this.retryDelay = retryDelay || 250;
-        this.log.debug(`Init retryDelay: ${this.retryDelay}`);
-
-        this.setNextInterval('scanDevices', this.retryDelay);
+        this.setNextInterval('scanDevices', 3000);
         this.subscribeStates('*');
     }
 
@@ -159,7 +154,7 @@ class SwitchbotBle extends utils.Adapter {
             default:
                 this.log.debug(`Unhandled control cmd ${cmd} for device ${macAddress}`);
         }
-        this.setNextInterval('scanDevices', this.retryDelay, macAddress);
+        this.setNextInterval('scanDevices', this.cmdInterval, macAddress);
     }
 
     async botAction(cmd, macAddress) {

@@ -27,9 +27,5 @@ systemDictionary = {
     'pressDevicesWait': {
         'en': 'Waiting time for successfully moving the arm of the bot (seconds)',
         'de': 'Wartezeit für erfolgreiches Bewegen vom Arm des Bots (Sekunden)',
-    },
-    'retryDelay': {
-        'en': 'Delay while retrying to  (milliseconds)',
-        'de': 'Auf Geräte warten (Millisekunden)',
     }
 };
