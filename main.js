@@ -134,21 +134,23 @@ class SwitchbotBle extends utils.Adapter {
         const on = this.switchbotDevice[macAddress]['on'];
         switch (cmd) {
             case 'turnOn':
-                if (on === true) {
+                if (on) {
                     this.log.info(`Device ${macAddress} already turned on`);
                     this.setNextInterval('scanDevices', this.cmdInterval, null);
+                    return;
                 } else {
                     await this.botAction(cmd, macAddress);
+                    break;
                 }
-                break;
             case 'turnOff':
-                if (on === false) {
+                if (!on) {
                     this.log.info(`Device ${macAddress} already turned off`);
                     this.setNextInterval('scanDevices', this.cmdInterval, null);
+                    return;
                 } else {
                     await this.botAction(cmd, macAddress);
+                    break;
                 }
-                break;
             case 'press':
             case 'up':
             case 'down':
