@@ -78,7 +78,7 @@ class SwitchbotBle extends utils.Adapter {
                     this.inverseOnOff[macAddress] = state.val;
                     this.setState(macAddress + '.control.inverseOnOff', state.val, true);
                 } else {
-                    this.setNextInterval(cmd, 100, macAddress);
+                    this.setNextInterval(cmd, 0, macAddress);
                 }
             }
         } else {
@@ -218,7 +218,7 @@ class SwitchbotBle extends utils.Adapter {
             this.setIsBusy(false);
         }).catch((error) => {
             this.log.warn(`Error while running deviceAction ${cmd} for device ${macAddress}: ${error.toString()}`);
-            this.setNextInterval('scanDevices', this.cmdInterval);
+            this.setNextInterval(cmd, this.scanDevicesWait, macAddress);
             this.setIsBusy(false);
         });
     }
