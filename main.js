@@ -26,7 +26,7 @@ class SwitchbotBle extends utils.Adapter {
         this.intervalNextCmd = {
             'cmd': 'scanDevices',
             'macAddress': null,
-            'interval': 250
+            'interval': null
         };
         this.isBusy = false;
         this.switchbot = new Switchbot();
