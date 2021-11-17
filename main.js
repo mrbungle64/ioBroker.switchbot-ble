@@ -160,6 +160,7 @@ class SwitchbotBle extends utils.Adapter {
     async botAction(cmd, macAddress) {
         if (this.isBusy) {
             this.setNextInterval(cmd, this.scanDevicesWait, macAddress);
+            return;
         }
         this.setIsBusy(true);
         let bot = null;
@@ -216,19 +217,16 @@ class SwitchbotBle extends utils.Adapter {
             this.setNextInterval('scanDevices', this.cmdInterval);
             this.setIsBusy(false);
         }).catch((error) => {
-            this.setIsBusy(false);
             this.log.warn(`Error while running deviceAction ${cmd} for device ${macAddress}: ${error.toString()}`);
-            if (error.toString().includes('Wait for a few seconds then try again')) {
-                this.setNextInterval(cmd, this.scanDevicesWait, macAddress);
-            } else {
-                this.setNextInterval('scanDevices', this.cmdInterval);
-            }
+            this.setNextInterval('scanDevices', this.cmdInterval);
+            this.setIsBusy(false);
         });
     }
 
     async scanDevices() {
         if (this.isBusy) {
             this.setNextInterval('scanDevices', this.cmdInterval);
+            return;
         }
         this.setIsBusy(true);
         this.switchbot.startScan().then(() => {
