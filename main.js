@@ -217,8 +217,8 @@ class SwitchbotBle extends utils.Adapter {
             this.setIsBusy(false);
         }).catch((error) => {
             this.setIsBusy(false);
-            this.log.warn(`Error while running deviceAction ${cmd} for device ${macAddress}: ${error}`);
-            if (error.includes('Wait for a few seconds then try again')) {
+            this.log.warn(`Error while running deviceAction ${cmd} for device ${macAddress}: ${error.toString()}`);
+            if (error.toString().includes('Wait for a few seconds then try again')) {
                 this.setNextInterval(cmd, this.scanDevicesWait, macAddress);
             } else {
                 this.setNextInterval('scanDevices', this.cmdInterval);
