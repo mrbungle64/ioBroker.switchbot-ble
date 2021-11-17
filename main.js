@@ -153,8 +153,8 @@ class SwitchbotBle extends utils.Adapter {
                 break;
             default:
                 this.log.debug(`Unhandled control cmd ${cmd} for device ${macAddress}`);
+                this.setNextInterval('scanDevices', this.cmdInterval);
         }
-        this.setNextInterval('scanDevices', this.cmdInterval);
     }
 
     async botAction(cmd, macAddress) {
@@ -213,10 +213,13 @@ class SwitchbotBle extends utils.Adapter {
             this.setStateConditional(macAddress + '.on', on, true);
         }).then(() => {
             bot.disconnect();
+            this.setNextInterval('scanDevices', this.cmdInterval);
+            this.setIsBusy(false);
         }).catch((error) => {
             this.log.warn(`Error while running deviceAction ${cmd} for device ${macAddress}: ${error}`);
+            this.setNextInterval('scanDevices', this.cmdInterval);
+            this.setIsBusy(false);
         });
-        this.setIsBusy(false);
     }
 
     async scanDevices(setNextInterval = true) {
@@ -228,8 +231,16 @@ class SwitchbotBle extends utils.Adapter {
             return this.switchbot.wait(this.scanDevicesWait);
         }).then(() => {
             this.switchbot.stopScan();
+            this.setIsBusy(false);
+            if (setNextInterval) {
+                this.setNextInterval('scanDevices', this.cmdInterval);
+            }
         }).catch((error) => {
             this.log.error(`error: ${error}`);
+            this.setIsBusy(false);
+            if (setNextInterval) {
+                this.setNextInterval('scanDevices', this.cmdInterval);
+            }
         });
 
         this.switchbot.onadvertisement = (data) => {
@@ -249,11 +260,6 @@ class SwitchbotBle extends utils.Adapter {
             }
             this.setStates(data);
         };
-        this.setIsBusy(false);
-        this.log.debug('[scanDevices] setNextInterval: ' + setNextInterval);
-        if (setNextInterval) {
-            this.setNextInterval('scanDevices', this.cmdInterval);
-        }
     }
 
     setStates(data) {
