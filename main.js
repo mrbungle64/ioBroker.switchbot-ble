@@ -163,13 +163,18 @@ class SwitchbotBle extends utils.Adapter {
     }
 
     async botAction(cmd, macAddress) {
+        this.switchbot.stopScan();
+        let bot = null;
         this.switchbot.discover({
             id: macAddress,
             model: 'H',
             quick: true,
             duration: this.pressDevicesWait
         }).then((device_list) => {
-            const bot = device_list[0];
+            bot = device_list[0];
+            this.log.debug(`Connecting to device ${macAddress} ...`);
+            return bot.connect();
+        }).then(() => {
             switch (cmd) {
                 case 'turnOn':
                     return bot.turnOn();
@@ -208,22 +213,23 @@ class SwitchbotBle extends utils.Adapter {
             this.switchbotDevice[macAddress]['on'] = on;
             this.setStateConditional(macAddress + '.' + cmd, on, true);
             this.setStateConditional(macAddress + '.on', on, true);
+        }).then(() => {
+            bot.disconnect();
         }).catch((error) => {
             this.log.warn(`Error while running deviceAction ${cmd} for device ${macAddress}: ${error}`);
         });
     }
 
     async scanDevices(setNextInterval = true) {
-        const nodeSwitchbot = new Switchbot();
-        nodeSwitchbot.startScan().then(() => {
-            return nodeSwitchbot.wait(this.scanDevicesWait);
+        this.switchbot.startScan().then(() => {
+            return this.switchbot.wait(this.scanDevicesWait);
         }).then(() => {
-            nodeSwitchbot.stopScan();
+            this.switchbot.stopScan();
         }).catch((error) => {
             this.log.error(`error: ${error}`);
         });
 
-        nodeSwitchbot.onadvertisement = (data) => {
+        this.switchbot.onadvertisement = (data) => {
             if (!this.switchbotDevice[data.address]) {
                 (async () => {
                     await this.createBotObjects(data);
