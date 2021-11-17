@@ -222,7 +222,7 @@ class SwitchbotBle extends utils.Adapter {
         });
     }
 
-    async scanDevices(setNextInterval = true) {
+    async scanDevices() {
         if (this.isBusy) {
             this.setNextInterval('scanDevices', this.cmdInterval);
         }
@@ -232,15 +232,11 @@ class SwitchbotBle extends utils.Adapter {
         }).then(() => {
             this.switchbot.stopScan();
             this.setIsBusy(false);
-            if (setNextInterval) {
-                this.setNextInterval('scanDevices', this.cmdInterval);
-            }
+            this.setNextInterval('scanDevices', this.cmdInterval);
         }).catch((error) => {
             this.log.error(`error: ${error}`);
             this.setIsBusy(false);
-            if (setNextInterval) {
-                this.setNextInterval('scanDevices', this.cmdInterval);
-            }
+            this.setNextInterval('scanDevices', this.cmdInterval);
         });
 
         this.switchbot.onadvertisement = (data) => {
