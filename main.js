@@ -26,6 +26,8 @@ class SwitchbotBle extends utils.Adapter {
         this.pressDevicesWait = null;
         this.inverseOnOff = [];
         this.switchbotDevice = [];
+        this.maxRetries = 15;
+        this.retries = 0;
         this.intervalNextCmd = {
             'cmd': 'scanDevices',
             'macAddress': null,
@@ -90,15 +92,16 @@ class SwitchbotBle extends utils.Adapter {
         this.intervalNextCmd['cmd'] = cmd;
         this.intervalNextCmd['macAddress'] = device;
         if (this.intervalNextCmd['interval'] !== interval) {
-            this.log.debug('[setNextInterval] interval: ' + interval);
-            this.intervalNextCmd['interval'] = interval;
             if (this.interval) {
                 clearInterval(this.interval);
             }
+            this.intervalNextCmd['interval'] = interval;
+            this.log.debug(`[setNextInterval] New interval: ${interval}`);
             this.interval = setInterval(() => {
                 (async () => {
                     await this.execNextCmd();
-                })().catch(() => {
+                })().catch((error) => {
+                    this.log.error(`Error exec execNextCmd: ${error.toString()}`);
                 });
             }, interval);
         }
@@ -214,17 +217,25 @@ class SwitchbotBle extends utils.Adapter {
         }).then(() => {
             bot.disconnect();
             this.setNextInterval('scanDevices', this.cmdInterval);
+            this.retries = 0;
             this.setIsBusy(false);
         }).catch((error) => {
             this.log.warn(`[botAction] Error while running deviceAction ${cmd} for device ${macAddress}: ${error.toString()}`);
-            this.setNextInterval(cmd, this.scanDevicesWait, macAddress);
+            if (this.retries < this.maxRetries) {
+                this.retries++;
+                this.log.info(`[botAction] Will try again (${this.retries}/${this.maxRetries}) ...`);
+                this.setNextInterval(cmd, this.scanDevicesWait, macAddress);
+            } else {
+                this.log.info(`[botAction] Max. retries (${this.maxRetries}) reached. Giving up ...`);
+                this.setNextInterval('scanDevices', this.cmdInterval);
+            }
             this.setIsBusy(false);
         });
     }
 
     async scanDevices() {
         if (this.isBusy) {
-            this.setNextInterval('scanDevices', this.cmdInterval);
+            this.setNextInterval('scanDevices', this.scanDevicesWait);
             return;
         }
         this.setIsBusy(true);
