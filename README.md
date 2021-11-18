@@ -75,6 +75,9 @@ sudo setcap cap_net_raw+eip $(eval readlink -f `which node`)
 
 ## Changelog
 
+### 0.3.3
+* Implemented max retries limit (15)
+
 ### 0.3.2
 * Some improvements on handling errors and executing commands
 
