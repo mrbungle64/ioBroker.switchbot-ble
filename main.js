@@ -282,11 +282,9 @@ class SwitchbotBle extends utils.Adapter {
             if (data.serviceData.model === 'H') {
                 // SwitchBot Bot (WoHand)
                 this.setStateConditional(data.address + '.deviceInfo.switchMode', data.serviceData.mode, true);
-                if (data.serviceData.mode === true) {
-                    this.setStateConditional(data.address + '.deviceInfo.state', data.serviceData.state, true);
-                    this.switchbotDevice[data.address]['on'] = this.getOnState(data);
-                    this.setStateConditional(data.address + '.on', this.switchbotDevice[data.address]['on'], true);
-                }
+                this.setStateConditional(data.address + '.deviceInfo.state', data.serviceData.state, true);
+                this.switchbotDevice[data.address]['on'] = this.getOnState(data);
+                this.setStateConditional(data.address + '.on', this.switchbotDevice[data.address]['on'], true);
             } else if (data.serviceData.model === 'T') {
                 // SwitchBot Meter (WoSensorTH)
                 this.setStateConditional(data.address + '.temperature', data.serviceData.temperature.c, true);
