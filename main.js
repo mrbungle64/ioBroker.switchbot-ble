@@ -196,11 +196,13 @@ class SwitchbotBle extends utils.Adapter {
                 case 'turnOn':
                     this.log.info(`[botAction] Device ${macAddress} turned on`);
                     this.setStateConditional(macAddress + '.control.turnOn', true, true);
+                    this.setStateConditional(macAddress + '.control.turnOff', false, true);
                     on = true;
                     break;
                 case 'turnOff':
                     this.log.info(`[botAction] Device ${macAddress} turned off`);
                     this.setStateConditional(macAddress + '.control.turnOff', true, true);
+                    this.setStateConditional(macAddress + '.control.turnOn', false, true);
                     break;
                 case 'press':
                     this.log.info(`[botAction] Device ${macAddress} pressed`);
@@ -211,10 +213,12 @@ class SwitchbotBle extends utils.Adapter {
                 case 'up':
                     this.log.info(`[botAction] Device ${macAddress} pressed up`);
                     this.setStateConditional(macAddress + '.control.up', true, true);
+                    this.setStateConditional(macAddress + '.control.down', false, true);
                     break;
                 case 'down':
                     this.log.info(`[botAction] Device ${macAddress} pressed down`);
                     this.setStateConditional(macAddress + '.control.down', true, true);
+                    this.setStateConditional(macAddress + '.control.up', false, true);
                     on = true;
                     break;
             }
