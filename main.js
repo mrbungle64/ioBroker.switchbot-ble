@@ -206,8 +206,12 @@ class SwitchbotBle extends utils.Adapter {
                     break;
                 case 'press':
                     this.log.info(`[botAction] Device ${macAddress} pressed`);
+                    this.setStateConditional(macAddress + '.control.down', true, true);
+                    this.setStateConditional(macAddress + '.control.up', false, true);
                     setTimeout(() => {
                         this.setStateConditional(macAddress + '.control.press', false, true);
+                        this.setStateConditional(macAddress + '.control.down', false, true);
+                        this.setStateConditional(macAddress + '.control.up', true, true);
                     }, 1000);
                     break;
                 case 'up':
