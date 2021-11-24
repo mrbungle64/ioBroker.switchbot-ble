@@ -21,11 +21,11 @@ systemDictionary = {
         'de': 'Intervall für die Gerätesuche (Sekunden)'
     },
     'scanDevicesWait': {
-        'en': 'Wait while scanning devices (seconds)',
+        'en': 'Waiting time while scanning devices (seconds)',
         'de': 'Wartezeit während der Gerätesuche (Sekunden)',
     },
-    'retryDelay': {
-        'en': 'Delay while retrying to  (milliseconds)',
-        'de': 'Auf Geräte warten (Millisekunden)',
+    'pressDevicesWait': {
+        'en': 'Waiting time for successfully moving the arm of the bot (seconds)',
+        'de': 'Wartezeit für erfolgreiches Bewegen vom Arm des Bots (Sekunden)',
     }
 };
