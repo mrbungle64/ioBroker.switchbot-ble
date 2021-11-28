@@ -255,6 +255,22 @@ class SwitchbotBle extends utils.Adapter {
         }
         this.setIsBusy(true);
         this.switchbot.startScan().then(() => {
+            this.switchbot.onadvertisement = (data) => {
+                if (!this.switchbotDevice[data.address]) {
+                    (async () => {
+                        await this.createBotObjects(data);
+                        this.switchbotDevice[data.address] = data;
+                        this.log.info(`[onadvertisement] Device detected: ${data.address}`);
+                    })().catch((error) => {
+                        this.log.error(`[onadvertisement] Error while creating objects: ${error}`);
+                    });
+                }
+                (async () => {
+                    await this.setStateValues(data);
+                })().catch((error) => {
+                    this.log.error(`[onadvertisement] Error while set state values: ${error}`);
+                });
+            };
             return this.switchbot.wait(this.scanDevicesWait);
         }).then(() => {
             this.switchbot.stopScan();
@@ -265,27 +281,9 @@ class SwitchbotBle extends utils.Adapter {
             this.setIsBusy(false);
             this.setNextInterval('scanDevices', this.cmdInterval);
         });
-
-        this.switchbot.onadvertisement = (data) => {
-            if (!this.switchbotDevice[data.address]) {
-                (async () => {
-                    await this.createBotObjects(data);
-                })().catch((error) => {
-                    this.log.error(`[onadvertisement] Error while creating objects: ${error}`);
-                });
-                this.switchbotDevice[data.address] = data;
-                this.log.info(`[onadvertisement] Device detected: ${data.address}`);
-                this.getState(data.address + '.control.inverseOnOff', (err, state) => {
-                    if (!err && state) {
-                        this.inverseOnOff[data.address] = state.val;
-                    }
-                });
-            }
-            this.setStates(data);
-        };
     }
 
-    setStates(data) {
+    async setStateValues(data) {
         if (data.serviceData) {
             this.setStateConditional('info.connection', true, true);
             this.setStateConditional(data.address + '.deviceInfo.rssi', data.rssi, true);
@@ -298,8 +296,12 @@ class SwitchbotBle extends utils.Adapter {
                 // SwitchBot Bot (WoHand)
                 this.setStateConditional(data.address + '.deviceInfo.switchMode', data.serviceData.mode, true);
                 this.setStateConditional(data.address + '.deviceInfo.state', data.serviceData.state, true);
-                this.switchbotDevice[data.address]['on'] = this.getOnState(data);
-                this.setStateConditional(data.address + '.on', this.switchbotDevice[data.address]['on'], true);
+                const state = await this.getStateAsync(data.address + '.control.inverseOnOff');
+                if (state) {
+                    this.inverseOnOff[data.address] = state.val;
+                    this.switchbotDevice[data.address]['on'] = this.getOnStateValue(data);
+                    this.setStateConditional(data.address + '.on', this.switchbotDevice[data.address]['on'], true);
+                }
             } else if (data.serviceData.model === 'T') {
                 // SwitchBot Meter (WoSensorTH)
                 this.setStateConditional(data.address + '.temperature', data.serviceData.temperature.c, true);
@@ -320,7 +322,7 @@ class SwitchbotBle extends utils.Adapter {
         }
     }
 
-    getOnState(data) {
+    getOnStateValue(data) {
         let on = data.serviceData.state;
         if (this.inverseOnOff[data.address] === true) {
             on = !data.serviceData.state;
