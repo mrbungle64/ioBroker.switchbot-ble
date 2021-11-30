@@ -295,6 +295,7 @@ class SwitchbotBle extends utils.Adapter {
 
     async scanDevices() {
         if (this.isBusy) {
+            this.setNextInterval('scanDevices', this.scanDevicesWait);
             return;
         }
         this.setIsBusy(true);
