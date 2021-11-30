@@ -182,7 +182,7 @@ class SwitchbotBle extends utils.Adapter {
 
     async botAction(cmd, macAddress, model = 'H', value = null) {
         if (this.isBusy) {
-            this.setNextInterval(cmd, this.scanDevicesWait, macAddress, value);
+            this.setNextInterval(cmd, 250, macAddress, value);
             return;
         }
         this.setIsBusy(true);
@@ -279,7 +279,6 @@ class SwitchbotBle extends utils.Adapter {
             bot.disconnect();
             this.setNextInterval('scanDevices', this.cmdInterval);
             this.retries = 0;
-            this.setIsBusy(false);
         }).catch((error) => {
             this.log.warn(`[botAction] error while running cmd ${cmd} for ${helper.getProductName(model)} (${macAddress}): ${error.toString()}`);
             if (this.retries < this.maxRetries) {
@@ -290,13 +289,12 @@ class SwitchbotBle extends utils.Adapter {
                 this.log.info(`[botAction] max. retries (${this.maxRetries}) reached. Giving up ...`);
                 this.setNextInterval('scanDevices', this.cmdInterval);
             }
-            this.setIsBusy(false);
         });
+        this.setIsBusy(false);
     }
 
     async scanDevices() {
         if (this.isBusy) {
-            this.setNextInterval('scanDevices', this.scanDevicesWait);
             return;
         }
         this.setIsBusy(true);
