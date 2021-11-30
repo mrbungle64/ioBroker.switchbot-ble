@@ -105,7 +105,7 @@ class SwitchbotBle extends utils.Adapter {
                 (async () => {
                     await this.execNextCmd();
                 })().catch((error) => {
-                    this.log.error(`Error exec execNextCmd: ${error.toString()}`);
+                    this.log.error(`[setNextInterval] Error exec execNextCmd: ${error.toString()}`);
                 });
             }, interval);
         }
@@ -192,7 +192,13 @@ class SwitchbotBle extends utils.Adapter {
             duration: this.pressDevicesWait
         }).then((device_list) => {
             bot = device_list[0];
-            this.log.debug(`[botAction] Connecting to device ${macAddress} ...`);
+            this.log.info(`[botAction] Connecting to ${helper.getProductName(model)} (${macAddress}) ...`);
+            if (this.retries < 1) {
+                this.log.info(`[botAction] The cmd triggered is: ${cmd}`);
+                if (value) {
+                    this.log.info(`[botAction] The value passed is: ${value}`);
+                }
+            }
             return bot.connect();
         }).then(() => {
             switch (cmd) {
@@ -215,7 +221,7 @@ class SwitchbotBle extends utils.Adapter {
                 case 'runToPos':
                     return bot.runToPos(value);
                 default:
-                    throw new Error(`Unhandled control cmd ${cmd} for device ${macAddress}`);
+                    throw new Error(`Unhandled control cmd ${cmd} for ${helper.getProductName(model)} (${macAddress})`);
             }
         }).then(() => {
             let on = false;
@@ -273,7 +279,7 @@ class SwitchbotBle extends utils.Adapter {
             this.retries = 0;
             this.setIsBusy(false);
         }).catch((error) => {
-            this.log.warn(`[botAction] Error while running deviceAction ${cmd} for device ${macAddress}: ${error.toString()}`);
+            this.log.warn(`[botAction] Error while running cmd ${cmd} for ${helper.getProductName(model)} (${macAddress}): ${error.toString()}`);
             if (this.retries < this.maxRetries) {
                 this.retries++;
                 this.log.info(`[botAction] Will try again (${this.retries}/${this.maxRetries}) ...`);
@@ -298,15 +304,15 @@ class SwitchbotBle extends utils.Adapter {
                     (async () => {
                         await this.createBotObjects(data);
                         this.switchbotDevice[data.address] = data;
-                        this.log.info(`[onadvertisement] Device detected: ${data.address}`);
+                        this.log.info(`[scanDevices] Device detected: ${helper.getProductName(data.serviceData.model)} (${data.address})`);
                     })().catch((error) => {
-                        this.log.error(`[onadvertisement] Error while creating objects: ${error}`);
+                        this.log.error(`[scanDevices] Error while creating objects: ${error}`);
                     });
                 }
                 (async () => {
                     await this.setStateValues(data);
                 })().catch((error) => {
-                    this.log.error(`[onadvertisement] Error while set state values: ${error}`);
+                    this.log.error(`[scanDevices] Error while set state values: ${error}`);
                 });
             };
             return this.switchbot.wait(this.scanDevicesWait);
@@ -380,7 +386,7 @@ class SwitchbotBle extends utils.Adapter {
 
     setIsBusy(isBusy) {
         this.isBusy = isBusy;
-        this.log.debug('[setIsBusy] isBusy: ' + this.isBusy);
+        this.log.debug(`[setIsBusy] busy: ${this.isBusy}`);
     }
 
     async createBotObjects(object) {
