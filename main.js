@@ -275,13 +275,13 @@ class SwitchbotBle extends utils.Adapter {
                 this.setStateConditional(macAddress + '.' + cmd, on, true);
                 this.setStateConditional(macAddress + '.on', on, true);
             }
+            return this.switchbot.wait(1000);
         }).then(() => {
             bot.disconnect();
             this.retries = 0;
             this.setIsBusy(false);
             this.setNextInterval('scanDevices', this.cmdInterval);
         }).catch((error) => {
-            bot.disconnect();
             this.log.warn(`[botAction] error while running cmd ${cmd} for ${helper.getProductName(model)} (${macAddress}): ${error.toString()}`);
             if (this.retries < this.maxRetries) {
                 this.retries++;
