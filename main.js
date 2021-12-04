@@ -93,6 +93,9 @@ class SwitchbotBle extends utils.Adapter {
     }
 
     setNextInterval(cmd, interval, macAddress = null, value = null) {
+        if (this.isBusy && (cmd === 'scanDevices')) {
+            return;
+        }
         this.log.debug('[setNextInterval] cmd: ' + cmd);
         this.intervalNextCmd['cmd'] = cmd;
         this.intervalNextCmd['macAddress'] = macAddress;
@@ -288,7 +291,7 @@ class SwitchbotBle extends utils.Adapter {
                 this.log.info(`[botAction] will try again (${this.retries}/${this.maxRetries}) ...`);
                 this.setNextInterval(cmd, this.scanDevicesWait, macAddress, value);
             } else {
-                this.log.info(`[botAction] max. retries (${this.maxRetries}) reached. Giving up ...`);
+                this.log.warn(`[botAction] max. retries (${this.maxRetries}) reached. Giving up ...`);
                 this.setNextInterval('scanDevices', this.cmdInterval);
             }
             this.setIsBusy(false);
