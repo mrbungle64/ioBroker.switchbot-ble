@@ -49,9 +49,11 @@ See the documentation of [@abandonware/noble](https://github.com/abandonware/nob
 * SwitchBot "Bot"
 * SwitchBot "Meter"
 
-#### Other models (untested)
+#### Other models
 
-* SwitchBot "Curtain" (read-only)
+* SwitchBot "Curtain" (experimental)
+* SwitchBot "Contact" (implemented, but does not work yet due to [issues](https://github.com/OpenWonderLabs/homebridge-switchbot/issues/104#issuecomment-979372200) in the library)
+* SwitchBot "Motion" (implemented, but does not work yet due to [issues](https://github.com/OpenWonderLabs/homebridge-switchbot/issues/104#issuecomment-979372200) in the library)
 
 ## Usage
 
