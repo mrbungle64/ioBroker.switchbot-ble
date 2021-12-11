@@ -31,7 +31,8 @@ class SwitchbotBle extends utils.Adapter {
         this.intervalNextCmd = {
             'cmd': 'scanDevices',
             'macAddress': null,
-            'interval': null
+            'interval': null,
+            'value': null
         };
         this.isBusy = false;
     }
@@ -66,7 +67,7 @@ class SwitchbotBle extends utils.Adapter {
 
     onStateChange(id, state) {
         if (state) {
-            this.log.debug(`[onStateChange] State ${id} changed: ${state.val} (ack = ${state.ack})`);
+            this.log.debug(`[onStateChange] state ${id} changed: ${state.val} (ack = ${state.ack})`);
             const stateName = helper.getStateNameById(id);
             const macAddress = helper.getDeviceAddressById(id);
             const channelName = helper.getChannelNameById(id);
@@ -75,33 +76,41 @@ class SwitchbotBle extends utils.Adapter {
                     return;
                 }
                 const cmd = stateName;
+                this.log.info(`[onStateChange] received command: ${cmd}`);
                 if (cmd === 'inverseOnOff') {
                     this.inverseOnOff[macAddress] = state.val;
                     this.setState(macAddress + '.control.inverseOnOff', state.val, true);
+                } else if (cmd === 'runToPos') {
+                    this.log.info(`[onStateChange] received value: ${state.val}`);
+                    this.setNextInterval(cmd, 0, macAddress, state.val);
                 } else {
                     this.setNextInterval(cmd, 0, macAddress);
                 }
             }
         } else {
-            this.log.debug(`[onStateChange] State ${id} deleted`);
+            this.log.debug(`[onStateChange] state ${id} deleted`);
         }
     }
 
-    setNextInterval(cmd, interval, device = null) {
+    setNextInterval(cmd, interval, macAddress = null, value = null) {
+        if (this.isBusy && (cmd === 'scanDevices')) {
+            return;
+        }
         this.log.debug('[setNextInterval] cmd: ' + cmd);
         this.intervalNextCmd['cmd'] = cmd;
-        this.intervalNextCmd['macAddress'] = device;
+        this.intervalNextCmd['macAddress'] = macAddress;
+        this.intervalNextCmd['value'] = value;
         if (this.intervalNextCmd['interval'] !== interval) {
             if (this.interval) {
                 clearInterval(this.interval);
             }
             this.intervalNextCmd['interval'] = interval;
-            this.log.debug(`[setNextInterval] New interval: ${interval}`);
+            this.log.debug(`[setNextInterval] new interval: ${interval}`);
             this.interval = setInterval(() => {
                 (async () => {
                     await this.execNextCmd();
                 })().catch((error) => {
-                    this.log.error(`Error exec execNextCmd: ${error.toString()}`);
+                    this.log.error(`[setNextInterval] error exec execNextCmd: ${error.toString()}`);
                 });
             }, interval);
         }
@@ -110,6 +119,7 @@ class SwitchbotBle extends utils.Adapter {
     async execNextCmd() {
         const macAddress = this.intervalNextCmd['macAddress'];
         const cmd = this.intervalNextCmd['cmd'];
+        const value = this.intervalNextCmd['value'];
         this.log.debug('[execNextCmd] cmd: ' + cmd);
         switch (cmd) {
             case 'scanDevices':
@@ -120,60 +130,80 @@ class SwitchbotBle extends utils.Adapter {
             case 'press':
             case 'turnOn':
             case 'turnOff':
+            case 'open':
+            case 'close':
+            case 'pause':
                 await this.deviceAction(cmd, macAddress);
+                break;
+            case 'runToPos':
+                await this.deviceAction(cmd, macAddress, value);
                 break;
             default:
                 this.log.debug('[execNextCmd] unknown cmd: ' + cmd);
         }
     }
 
-    async deviceAction(cmd, macAddress) {
+    async deviceAction(cmd, macAddress, value = null) {
         const on = this.switchbotDevice[macAddress]['on'];
         switch (cmd) {
             case 'turnOn':
                 if (on) {
-                    this.log.info(`[deviceAction] Device ${macAddress} already turned on`);
+                    this.log.info(`[deviceAction] device ${macAddress} already turned on`);
                     this.setNextInterval('scanDevices', this.cmdInterval);
                     return;
                 } else {
-                    await this.botAction(cmd, macAddress);
+                    await this.botAction(cmd, macAddress, 'H');
                     break;
                 }
             case 'turnOff':
                 if (!on) {
-                    this.log.info(`[deviceAction] Device ${macAddress} already turned off`);
+                    this.log.info(`[deviceAction] device ${macAddress} already turned off`);
                     this.setNextInterval('scanDevices', this.cmdInterval);
                     return;
                 } else {
-                    await this.botAction(cmd, macAddress);
+                    await this.botAction(cmd, macAddress, 'H');
                     break;
                 }
             case 'press':
             case 'up':
             case 'down':
-                await this.botAction(cmd, macAddress);
+                await this.botAction(cmd, macAddress, 'H');
+                break;
+            case 'open':
+            case 'close':
+            case 'pause':
+                await this.botAction(cmd, macAddress, 'c');
+                break;
+            case 'runToPos':
+                await this.botAction(cmd, macAddress, 'c', value);
                 break;
             default:
-                this.log.debug(`[deviceAction] Unhandled control cmd ${cmd} for device ${macAddress}`);
+                this.log.debug(`[deviceAction] unhandled control cmd ${cmd} for device ${macAddress}`);
                 this.setNextInterval('scanDevices', this.cmdInterval);
         }
     }
 
-    async botAction(cmd, macAddress) {
+    async botAction(cmd, macAddress, model = 'H', value = null) {
         if (this.isBusy) {
-            this.setNextInterval(cmd, this.scanDevicesWait, macAddress);
+            this.setNextInterval(cmd, 250, macAddress, value);
             return;
         }
         this.setIsBusy(true);
         let bot = null;
         this.switchbot.discover({
             id: macAddress,
-            model: 'H',
+            model: model,
             quick: true,
             duration: this.pressDevicesWait
         }).then((device_list) => {
             bot = device_list[0];
-            this.log.debug(`[botAction] Connecting to device ${macAddress} ...`);
+            this.log.info(`[botAction] connecting to ${helper.getProductName(model)} (${macAddress}) ...`);
+            if (this.retries < 1) {
+                this.log.info(`[botAction] command: ${cmd}`);
+                if (value) {
+                    this.log.info(`[botAction] value: ${value}`);
+                }
+            }
             return bot.connect();
         }).then(() => {
             switch (cmd) {
@@ -187,25 +217,33 @@ class SwitchbotBle extends utils.Adapter {
                     return bot.up();
                 case 'down':
                     return bot.down();
+                case 'open':
+                    return bot.open();
+                case 'close':
+                    return bot.close();
+                case 'pause':
+                    return bot.pause();
+                case 'runToPos':
+                    return bot.runToPos(value);
                 default:
-                    throw new Error(`Unhandled control cmd ${cmd} for device ${macAddress}`);
+                    throw new Error(`Unhandled control cmd ${cmd} for ${helper.getProductName(model)} (${macAddress})`);
             }
         }).then(() => {
             let on = false;
             switch (cmd) {
                 case 'turnOn':
-                    this.log.info(`[botAction] Device ${macAddress} turned on`);
+                    this.log.info(`[botAction] ${helper.getProductName(model)} (${macAddress}) turned on`);
                     this.setStateConditional(macAddress + '.control.turnOn', true, true);
                     this.setStateConditional(macAddress + '.control.turnOff', false, true);
                     on = true;
                     break;
                 case 'turnOff':
-                    this.log.info(`[botAction] Device ${macAddress} turned off`);
+                    this.log.info(`[botAction] ${helper.getProductName(model)} (${macAddress}) turned off`);
                     this.setStateConditional(macAddress + '.control.turnOff', true, true);
                     this.setStateConditional(macAddress + '.control.turnOn', false, true);
                     break;
                 case 'press':
-                    this.log.info(`[botAction] Device ${macAddress} pressed`);
+                    this.log.info(`[botAction] ${helper.getProductName(model)} (${macAddress}) pressed`);
                     this.setStateConditional(macAddress + '.control.down', true, true);
                     this.setStateConditional(macAddress + '.control.up', false, true);
                     setTimeout(() => {
@@ -215,33 +253,45 @@ class SwitchbotBle extends utils.Adapter {
                     }, 1000);
                     break;
                 case 'up':
-                    this.log.info(`[botAction] Device ${macAddress} pressed up`);
+                    this.log.info(`[botAction] ${helper.getProductName(model)} (${macAddress}) pressed up`);
                     this.setStateConditional(macAddress + '.control.up', true, true);
                     this.setStateConditional(macAddress + '.control.down', false, true);
                     break;
                 case 'down':
-                    this.log.info(`[botAction] Device ${macAddress} pressed down`);
+                    this.log.info(`[botAction] ${helper.getProductName(model)} (${macAddress}) pressed down`);
                     this.setStateConditional(macAddress + '.control.down', true, true);
                     this.setStateConditional(macAddress + '.control.up', false, true);
                     on = true;
                     break;
+                case 'open':
+                case 'close':
+                case 'pause':
+                    this.log.info(`[botAction] send ${cmd} command to ${helper.getProductName(model)} (${macAddress})`);
+                    this.setStateConditional(macAddress + '.control.' + cmd, false, true);
+                    break;
+                case 'runToPos':
+                    this.log.info(`[botAction] send ${cmd} command to ${helper.getProductName(model)} (${macAddress}) with value ${value}`);
+                    break;
             }
-            this.switchbotDevice[macAddress]['on'] = on;
-            this.setStateConditional(macAddress + '.' + cmd, on, true);
-            this.setStateConditional(macAddress + '.on', on, true);
+            if (model === 'H') {
+                this.switchbotDevice[macAddress]['on'] = on;
+                this.setStateConditional(macAddress + '.' + cmd, on, true);
+                this.setStateConditional(macAddress + '.on', on, true);
+            }
+            return this.switchbot.wait(1000);
         }).then(() => {
             bot.disconnect();
-            this.setNextInterval('scanDevices', this.cmdInterval);
             this.retries = 0;
             this.setIsBusy(false);
+            this.setNextInterval('scanDevices', this.cmdInterval);
         }).catch((error) => {
-            this.log.warn(`[botAction] Error while running deviceAction ${cmd} for device ${macAddress}: ${error.toString()}`);
+            this.log.warn(`[botAction] error while running cmd ${cmd} for ${helper.getProductName(model)} (${macAddress}): ${error.toString()}`);
             if (this.retries < this.maxRetries) {
                 this.retries++;
-                this.log.info(`[botAction] Will try again (${this.retries}/${this.maxRetries}) ...`);
-                this.setNextInterval(cmd, this.scanDevicesWait, macAddress);
+                this.log.info(`[botAction] will try again (${this.retries}/${this.maxRetries}) ...`);
+                this.setNextInterval(cmd, this.scanDevicesWait, macAddress, value);
             } else {
-                this.log.info(`[botAction] Max. retries (${this.maxRetries}) reached. Giving up ...`);
+                this.log.warn(`[botAction] max. retries (${this.maxRetries}) reached. Giving up ...`);
                 this.setNextInterval('scanDevices', this.cmdInterval);
             }
             this.setIsBusy(false);
@@ -250,42 +300,39 @@ class SwitchbotBle extends utils.Adapter {
 
     async scanDevices() {
         if (this.isBusy) {
-            this.setNextInterval('scanDevices', this.scanDevicesWait);
             return;
         }
         this.setIsBusy(true);
         this.switchbot.startScan().then(() => {
+            this.switchbot.onadvertisement = (data) => {
+                if (!this.switchbotDevice[data.address]) {
+                    (async () => {
+                        await this.createBotObjects(data);
+                        this.switchbotDevice[data.address] = data;
+                        this.log.info(`[scanDevices] device detected: ${helper.getProductName(data.serviceData.model)} (${data.address})`);
+                    })().catch((error) => {
+                        this.log.error(`[scanDevices] error while creating objects: ${error}`);
+                    });
+                }
+                (async () => {
+                    await this.setStateValues(data);
+                })().catch((error) => {
+                    this.log.error(`[scanDevices] error while set state values: ${error}`);
+                });
+            };
             return this.switchbot.wait(this.scanDevicesWait);
         }).then(() => {
             this.switchbot.stopScan();
             this.setIsBusy(false);
             this.setNextInterval('scanDevices', this.cmdInterval);
         }).catch((error) => {
-            this.log.error(`[scanDevices] Error: ${error}`);
+            this.log.error(`[scanDevices] error: ${error}`);
             this.setIsBusy(false);
             this.setNextInterval('scanDevices', this.cmdInterval);
         });
-
-        this.switchbot.onadvertisement = (data) => {
-            if (!this.switchbotDevice[data.address]) {
-                (async () => {
-                    await this.createBotObjects(data);
-                })().catch((error) => {
-                    this.log.error(`[onadvertisement] Error while creating objects: ${error}`);
-                });
-                this.switchbotDevice[data.address] = data;
-                this.log.info(`[onadvertisement] Device detected: ${data.address}`);
-                this.getState(data.address + '.control.inverseOnOff', (err, state) => {
-                    if (!err && state) {
-                        this.inverseOnOff[data.address] = state.val;
-                    }
-                });
-            }
-            this.setStates(data);
-        };
     }
 
-    setStates(data) {
+    async setStateValues(data) {
         if (data.serviceData) {
             this.setStateConditional('info.connection', true, true);
             this.setStateConditional(data.address + '.deviceInfo.rssi', data.rssi, true);
@@ -298,8 +345,12 @@ class SwitchbotBle extends utils.Adapter {
                 // SwitchBot Bot (WoHand)
                 this.setStateConditional(data.address + '.deviceInfo.switchMode', data.serviceData.mode, true);
                 this.setStateConditional(data.address + '.deviceInfo.state', data.serviceData.state, true);
-                this.switchbotDevice[data.address]['on'] = this.getOnState(data);
-                this.setStateConditional(data.address + '.on', this.switchbotDevice[data.address]['on'], true);
+                const state = await this.getStateAsync(data.address + '.control.inverseOnOff');
+                if (state) {
+                    this.inverseOnOff[data.address] = state.val;
+                    this.switchbotDevice[data.address]['on'] = this.getOnStateValue(data);
+                    this.setStateConditional(data.address + '.on', this.switchbotDevice[data.address]['on'], true);
+                }
             } else if (data.serviceData.model === 'T') {
                 // SwitchBot Meter (WoSensorTH)
                 this.setStateConditional(data.address + '.temperature', data.serviceData.temperature.c, true);
@@ -320,7 +371,7 @@ class SwitchbotBle extends utils.Adapter {
         }
     }
 
-    getOnState(data) {
+    getOnStateValue(data) {
         let on = data.serviceData.state;
         if (this.inverseOnOff[data.address] === true) {
             on = !data.serviceData.state;
@@ -340,7 +391,7 @@ class SwitchbotBle extends utils.Adapter {
 
     setIsBusy(isBusy) {
         this.isBusy = isBusy;
-        this.log.debug('[setIsBusy] isBusy: ' + this.isBusy);
+        this.log.debug(`[setIsBusy] busy: ${this.isBusy}`);
     }
 
     async createBotObjects(object) {

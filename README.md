@@ -53,14 +53,20 @@ See the documentation of [@abandonware/noble](https://github.com/abandonware/nob
 
 * SwitchBot "Curtain" (read-only)
 
-States should also be generated for other models (e.g. Contact Sensor, Humidifier),
-but they are also read-only and only contain information about the battery level and model.
+## Usage
 
-## Known issues
+### Remarks
 
-* "press", "turnOn" and "turnOff" from SwitchBot "Bot" sometimes not working
-  * There's no solution for this yet, because there's mostly no error message. It just doesn't move the arm
-  * However, it may be that in many cases it still works without any issues
+#### SwitchBot "Bot"
+
+* If you use the "Bot" in "Switch Mode" 
+  the value of the state "control.inverseOnOff" should be the same as "Inverse the on/off direction" in the app.
+  This is not automatically synchronized.
+
+#### All devices
+
+* The battery data is marked as experimental in the library for now.
+  So there's no guarantee that the value is correct.
 
 ## Troubleshooting
 
