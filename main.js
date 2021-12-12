@@ -293,6 +293,7 @@ class SwitchbotBle extends utils.Adapter {
             } else {
                 this.log.warn(`[botAction] max. retries (${this.maxRetries}) reached. Giving up ...`);
                 this.setNextInterval('scanDevices', this.cmdInterval);
+                this.retries = 0;
             }
             this.setIsBusy(false);
         });
