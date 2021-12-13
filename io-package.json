@@ -79,7 +79,8 @@
         "interval": "",
         "scanDevicesWait": "",
         "pressDevicesWait": "",
-        "retryDelay": ""
+        "waitingTimeRetries": "",
+        "maxRetriesDeviceAction": ""
     },
     "objects": [],
     "instanceObjects": [

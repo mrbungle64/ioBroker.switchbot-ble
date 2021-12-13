@@ -27,5 +27,13 @@ systemDictionary = {
     'pressDevicesWait': {
         'en': 'Waiting time for successfully moving the arm of the bot (seconds)',
         'de': 'Wartezeit für erfolgreiches Bewegen vom Arm des Bots (Sekunden)',
+    },
+    'waitingTimeRetries': {
+        'en': 'Waiting time for retries (milliseconds)',
+        'de': 'Wartezeit für Wiederholungsversuche (Millisekunden)',
+    },
+    'maxRetriesDeviceAction': {
+        'en': 'Max. number of retries for executing commands (e.g. press, open, runToPos)',
+        'de': 'Max. Anzahl von Wiederholungsversuchen für das Ausführen von Befehlen (z.B. press, open, runToPos)',
     }
 };

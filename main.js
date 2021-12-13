@@ -21,12 +21,13 @@ class SwitchbotBle extends utils.Adapter {
         this.switchbot = new Switchbot();
 
         this.interval = null;
-        this.cmdInterval = null;
-        this.scanDevicesWait = null;
-        this.pressDevicesWait = null;
+        this.cmdInterval = 15000;
+        this.scanDevicesWait = 3000;
+        this.pressDevicesWait = 5000;
+        this.waitingTimeRetries = 2000;
+        this.maxRetriesDeviceAction = 15;
         this.inverseOnOff = [];
         this.switchbotDevice = [];
-        this.maxRetries = 15;
         this.retries = 0;
         this.intervalNextCmd = {
             'cmd': 'scanDevices',
@@ -40,14 +41,20 @@ class SwitchbotBle extends utils.Adapter {
     async onReady() {
         this.setState('info.connection', false, true);
 
-        this.cmdInterval = Number(this.config.interval) || 15000;
+        this.cmdInterval = Number(this.config.interval) || this.cmdInterval;
         this.log.debug(`Init cmdInterval: ${this.cmdInterval}`);
 
-        this.scanDevicesWait = Number(this.config.scanDevicesWait) || 3000;
+        this.scanDevicesWait = Number(this.config.scanDevicesWait) || this.scanDevicesWait;
         this.log.debug(`Init scanDevicesWait: ${this.scanDevicesWait}`);
 
-        this.pressDevicesWait = Number(this.config.pressDevicesWait) || 5000;
+        this.pressDevicesWait = Number(this.config.pressDevicesWait) || this.pressDevicesWait;
         this.log.debug(`Init pressDevicesWait: ${this.pressDevicesWait}`);
+
+        this.waitingTimeRetries = Number(this.config.waitingTimeRetries) || this.waitingTimeRetries;
+        this.log.debug(`Init waitingTimeRetries: ${this.waitingTimeRetries}`);
+
+        this.maxRetriesDeviceAction = Number(this.config.maxRetriesDeviceAction) || this.maxRetriesDeviceAction;
+        this.log.debug(`Init maxRetriesDeviceAction: ${this.maxRetriesDeviceAction}`);
 
         this.setNextInterval('scanDevices', 250);
         this.subscribeStates('*');
@@ -105,7 +112,7 @@ class SwitchbotBle extends utils.Adapter {
                 clearInterval(this.interval);
             }
             this.intervalNextCmd['interval'] = interval;
-            this.log.debug(`[setNextInterval] new interval: ${interval}`);
+            this.log.silly(`[setNextInterval] new interval: ${interval}`);
             this.interval = setInterval(() => {
                 (async () => {
                     await this.execNextCmd();
@@ -117,8 +124,8 @@ class SwitchbotBle extends utils.Adapter {
     }
 
     async execNextCmd() {
-        const macAddress = this.intervalNextCmd['macAddress'];
         const cmd = this.intervalNextCmd['cmd'];
+        const macAddress = this.intervalNextCmd['macAddress'];
         const value = this.intervalNextCmd['value'];
         this.log.debug('[execNextCmd] cmd: ' + cmd);
         switch (cmd) {
@@ -286,12 +293,12 @@ class SwitchbotBle extends utils.Adapter {
             this.setNextInterval('scanDevices', this.cmdInterval);
         }).catch((error) => {
             this.log.warn(`[botAction] error while running cmd ${cmd} for ${helper.getProductName(model)} (${macAddress}): ${error.toString()}`);
-            if (this.retries < this.maxRetries) {
+            if (this.retries < this.maxRetriesDeviceAction) {
                 this.retries++;
-                this.log.info(`[botAction] will try again (${this.retries}/${this.maxRetries}) ...`);
-                this.setNextInterval(cmd, this.scanDevicesWait, macAddress, value);
+                this.log.info(`[botAction] will try again in ${this.waitingTimeRetries} ms (${this.retries}/${this.maxRetriesDeviceAction}) ...`);
+                this.setNextInterval(cmd, this.waitingTimeRetries, macAddress, value);
             } else {
-                this.log.warn(`[botAction] max. retries (${this.maxRetries}) reached. Giving up ...`);
+                this.log.warn(`[botAction] max. retries (${this.maxRetriesDeviceAction}) reached. Giving up ...`);
                 this.setNextInterval('scanDevices', this.cmdInterval);
                 this.retries = 0;
             }
