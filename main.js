@@ -201,8 +201,8 @@ class SwitchbotBle extends utils.Adapter {
 
     async botAction(cmd, macAddress, model = 'H', value = null) {
         if (this.isBusy) {
-            this.log.info(`[botAction] instance is busy. Will try cmd ${cmd} again in 250 ms`);
-            this.setNextInterval(cmd, 250, macAddress, value);
+            this.log.silly(`[botAction] instance is busy. Will try cmd ${cmd} again in 100 ms`);
+            this.setNextInterval(cmd, 100, macAddress, value);
             return;
         }
         this.setIsBusy(true);
