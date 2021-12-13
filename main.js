@@ -84,14 +84,18 @@ class SwitchbotBle extends utils.Adapter {
                 }
                 const cmd = stateName;
                 this.log.info(`[onStateChange] received command: ${cmd}`);
-                if (cmd === 'inverseOnOff') {
-                    this.inverseOnOff[macAddress] = state.val;
-                    this.setState(macAddress + '.control.inverseOnOff', state.val, true);
-                } else if (cmd === 'runToPos') {
-                    this.log.info(`[onStateChange] received value: ${state.val}`);
-                    this.setNextInterval(cmd, 0, macAddress, state.val);
-                } else {
-                    this.setNextInterval(cmd, 0, macAddress);
+                switch (cmd) {
+                    case 'inverseOnOff':
+                        this.inverseOnOff[macAddress] = state.val;
+                        this.setState(macAddress + '.control.inverseOnOff', state.val, true);
+                        break;
+                    case 'runToPos':
+                        this.log.info(`[onStateChange] received value: ${state.val}`);
+                        this.setNextInterval(cmd, 0, macAddress, state.val);
+                        break;
+                    default:
+                        this.setNextInterval(cmd, 0, macAddress);
+                        break;
                 }
             }
         } else {
