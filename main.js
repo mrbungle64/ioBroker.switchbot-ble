@@ -101,6 +101,7 @@ class SwitchbotBle extends utils.Adapter {
 
     setNextInterval(cmd, interval, macAddress = null, value = null) {
         if (this.isBusy && (cmd === 'scanDevices')) {
+            this.log.debug('[setNextInterval] scanDevices skipped because instance is busy');
             return;
         }
         this.log.debug('[setNextInterval] cmd: ' + cmd);
@@ -192,6 +193,7 @@ class SwitchbotBle extends utils.Adapter {
 
     async botAction(cmd, macAddress, model = 'H', value = null) {
         if (this.isBusy) {
+            this.log.info(`[botAction] instance is busy. Will try cmd ${cmd} again in 250 ms`);
             this.setNextInterval(cmd, 250, macAddress, value);
             return;
         }
@@ -308,6 +310,7 @@ class SwitchbotBle extends utils.Adapter {
 
     async scanDevices() {
         if (this.isBusy) {
+            this.log.debug('[scanDevices] scanDevices skipped because instance is busy');
             return;
         }
         this.setIsBusy(true);
