@@ -99,7 +99,7 @@ class SwitchbotBle extends utils.Adapter {
                             break;
                     }
                 } else {
-                    this.log.info(`[onStateChange] skipping received command: ${cmd}`);
+                    this.log.debug(`[onStateChange] skipping received command: ${cmd}`);
                 }
             }
         } else {
@@ -214,13 +214,13 @@ class SwitchbotBle extends utils.Adapter {
             duration: this.pressDevicesWait
         }).then((device_list) => {
             bot = device_list[0];
-            this.log.info(`[botAction] connecting to ${helper.getProductName(model)} (${macAddress}) ...`);
             if (this.retries < 1) {
-                this.log.info(`[botAction] command: ${cmd}`);
+                this.log.info(`[botAction] trying to executing command: ${cmd}`);
                 if (value) {
-                    this.log.info(`[botAction] value: ${value}`);
+                    this.log.info(`[botAction] with given value: ${value}`);
                 }
             }
+            this.log.info(`[botAction] connecting to ${helper.getProductName(model)} (${macAddress}) ...`);
             return bot.connect();
         }).then(() => {
             switch (cmd) {
@@ -249,18 +249,18 @@ class SwitchbotBle extends utils.Adapter {
             let on = false;
             switch (cmd) {
                 case 'turnOn':
-                    this.log.info(`[botAction] ${helper.getProductName(model)} (${macAddress}) turned on`);
+                    this.log.info(`[botAction] ${helper.getProductName(model)} (${macAddress}) successfully turned on`);
                     this.setStateConditional(macAddress + '.control.turnOn', true, true);
                     this.setStateConditional(macAddress + '.control.turnOff', false, true);
                     on = true;
                     break;
                 case 'turnOff':
-                    this.log.info(`[botAction] ${helper.getProductName(model)} (${macAddress}) turned off`);
+                    this.log.info(`[botAction] ${helper.getProductName(model)} (${macAddress}) successfully turned off`);
                     this.setStateConditional(macAddress + '.control.turnOff', true, true);
                     this.setStateConditional(macAddress + '.control.turnOn', false, true);
                     break;
                 case 'press':
-                    this.log.info(`[botAction] ${helper.getProductName(model)} (${macAddress}) pressed`);
+                    this.log.info(`[botAction] ${helper.getProductName(model)} (${macAddress}) successfully pressed`);
                     this.setStateConditional(macAddress + '.control.down', true, true);
                     this.setStateConditional(macAddress + '.control.up', false, true);
                     setTimeout(() => {
@@ -270,12 +270,12 @@ class SwitchbotBle extends utils.Adapter {
                     }, 1000);
                     break;
                 case 'up':
-                    this.log.info(`[botAction] ${helper.getProductName(model)} (${macAddress}) pressed up`);
+                    this.log.info(`[botAction] ${helper.getProductName(model)} (${macAddress}) successfully pressed up`);
                     this.setStateConditional(macAddress + '.control.up', true, true);
                     this.setStateConditional(macAddress + '.control.down', false, true);
                     break;
                 case 'down':
-                    this.log.info(`[botAction] ${helper.getProductName(model)} (${macAddress}) pressed down`);
+                    this.log.info(`[botAction] ${helper.getProductName(model)} (${macAddress}) successfully pressed down`);
                     this.setStateConditional(macAddress + '.control.down', true, true);
                     this.setStateConditional(macAddress + '.control.up', false, true);
                     on = true;
@@ -283,11 +283,11 @@ class SwitchbotBle extends utils.Adapter {
                 case 'open':
                 case 'close':
                 case 'pause':
-                    this.log.info(`[botAction] send ${cmd} command to ${helper.getProductName(model)} (${macAddress})`);
+                    this.log.info(`[botAction] successfully sent ${cmd} command to ${helper.getProductName(model)} (${macAddress})`);
                     this.setStateConditional(macAddress + '.control.' + cmd, false, true);
                     break;
                 case 'runToPos':
-                    this.log.info(`[botAction] send ${cmd} command to ${helper.getProductName(model)} (${macAddress}) with value ${value}`);
+                    this.log.info(`[botAction] successfully sent ${cmd} command to ${helper.getProductName(model)} (${macAddress}) with value ${value}`);
                     break;
             }
             if (model === 'H') {
