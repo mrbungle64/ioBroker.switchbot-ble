@@ -214,12 +214,16 @@ class SwitchbotBle extends utils.Adapter {
             duration: this.pressDevicesWait
         }).then((device_list) => {
             bot = device_list[0];
+            if (typeof bot === 'undefined')
+                return Promise.reject('Discover deviceList is empty!');
+
             if (this.retries < 1) {
                 this.log.info(`[botAction] trying to executing command: ${cmd}`);
                 if (value) {
                     this.log.info(`[botAction] with given value: ${value}`);
                 }
             }
+
             this.log.info(`[botAction] connecting to ${helper.getProductName(model)} (${macAddress}) ...`);
             return bot.connect();
         }).then(() => {
@@ -351,7 +355,16 @@ class SwitchbotBle extends utils.Adapter {
         });
     }
 
+    /**
+     *
+     * @param {{address: String, rssi: Number, id: String,
+     *          serviceData: {model: 'H'|'T'|'c'|'s'|'d', modelName: String, battery: Number, state: Boolean, mode: Boolean,
+     *                        temperature: {c: Number, f: Number}, humidity: Number,
+     *                        position: Number, calibration: Number, lightLevel: Number, movement: Boolean, doorState: String}}} data
+     */
     async setStateValues(data) {
+        this.log.debug(`[setStateValues] ${typeof data === 'undefined' ? JSON.stringify(data) : 'null'}`);
+
         if (data.serviceData) {
             this.setStateConditional('info.connection', true, true);
             this.setStateConditional(data.address + '.deviceInfo.rssi', data.rssi, true);
