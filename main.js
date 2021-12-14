@@ -214,12 +214,16 @@ class SwitchbotBle extends utils.Adapter {
             duration: this.pressDevicesWait
         }).then((device_list) => {
             bot = device_list[0];
+            if (typeof bot === 'undefined')
+                return Promise.reject('Discover deviceList is empty!');
+
             if (this.retries < 1) {
                 this.log.info(`[botAction] trying to executing command: ${cmd}`);
                 if (value) {
                     this.log.info(`[botAction] with given value: ${value}`);
                 }
             }
+
             this.log.info(`[botAction] connecting to ${helper.getProductName(model)} (${macAddress}) ...`);
             return bot.connect();
         }).then(() => {
@@ -351,7 +355,16 @@ class SwitchbotBle extends utils.Adapter {
         });
     }
 
+    /**
+     *
+     * @param {{address: String, rssi: Number, id: String,
+     *          serviceData: {model: 'H'|'T'|'c'|'s'|'d', modelName: String, battery: Number, state: Boolean, mode: Boolean,
+     *                        temperature: {c: Number, f: Number}, humidity: Number,
+     *                        position: Number, calibration: Number, lightLevel: Number, movement: Boolean, doorState: String}}} data
+     */
     async setStateValues(data) {
+        this.log.silly(`[setStateValues] ${typeof data !== 'undefined' ? JSON.stringify(data) : 'null'}`);
+
         if (data.serviceData) {
             this.setStateConditional('info.connection', true, true);
             this.setStateConditional(data.address + '.deviceInfo.rssi', data.rssi, true);
@@ -373,6 +386,7 @@ class SwitchbotBle extends utils.Adapter {
             } else if (data.serviceData.model === 'T') {
                 // SwitchBot Meter (WoSensorTH)
                 this.setStateConditional(data.address + '.temperature', data.serviceData.temperature.c, true);
+                this.setStateConditional(data.address + '.temperatureF', data.serviceData.temperature.f, true);
                 this.setStateConditional(data.address + '.humidity', data.serviceData.humidity, true);
             } else if (data.serviceData.model === 'c') {
                 // SwitchBot Curtain (WoCurtain)
@@ -415,6 +429,10 @@ class SwitchbotBle extends utils.Adapter {
 
     async createBotObjects(object) {
         await objects.createBotObjects(this, object);
+    }
+
+    async createDeviceNotExists(id, name) {
+        await objects.createDeviceNotExists(this, id, name);
     }
 
     async createChannelNotExists(id, name) {
