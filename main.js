@@ -363,7 +363,7 @@ class SwitchbotBle extends utils.Adapter {
      *                        position: Number, calibration: Number, lightLevel: Number, movement: Boolean, doorState: String}}} data
      */
     async setStateValues(data) {
-        this.log.debug(`[setStateValues] ${typeof data !== 'undefined' ? JSON.stringify(data) : 'null'}`);
+        this.log.silly(`[setStateValues] ${typeof data !== 'undefined' ? JSON.stringify(data) : 'null'}`);
 
         if (data.serviceData) {
             this.setStateConditional('info.connection', true, true);
