@@ -24,7 +24,6 @@ class SwitchbotBle extends utils.Adapter {
         this.interval = 15000;
         this.scanDevicesWait = 3000;
         this.pressDevicesWait = 5000;
-        this.waitingTimeRetries = 2000;
         this.maxRetriesDeviceAction = 15;
         this.inverseOnOff = [];
         this.switchbotDevice = [];
@@ -45,9 +44,6 @@ class SwitchbotBle extends utils.Adapter {
 
         this.pressDevicesWait = Number(this.config.pressDevicesWait) || this.pressDevicesWait;
         this.log.debug(`Init pressDevicesWait: ${this.pressDevicesWait}`);
-
-        this.waitingTimeRetries = Number(this.config.waitingTimeRetries) || this.waitingTimeRetries;
-        this.log.debug(`Init waitingTimeRetries: ${this.waitingTimeRetries}`);
 
         this.maxRetriesDeviceAction = Number(this.config.maxRetriesDeviceAction) || this.maxRetriesDeviceAction;
         this.log.debug(`Init maxRetriesDeviceAction: ${this.maxRetriesDeviceAction}`);
