@@ -55,9 +55,7 @@ class SwitchbotBle extends utils.Adapter {
         this.scanDevicesInterval = setInterval(() => {
             (async () => {
                 if (!this.isBusy) {
-                    this.setIsBusy(true);
                     await this.scanDevices();
-                    this.setIsBusy(false);
                 }
             })().catch((error) => {
                 this.log.error(`[scanDevicesInterval] error while scanning devices: ${error}`);
@@ -265,7 +263,7 @@ class SwitchbotBle extends utils.Adapter {
             if (this.retries < this.maxRetriesDeviceAction) {
                 this.retries++;
                 this.log.info(`[botAction] will try again (${this.retries}/${this.maxRetriesDeviceAction}) ...`);
-                this.commandQueue.add(cmd, macAddress, value);
+                this.commandQueue.addRetry(cmd, macAddress, value);
             } else {
                 this.log.warn(`[botAction] max. retries (${this.maxRetriesDeviceAction}) reached. Giving up ...`);
                 this.retries = 0;
@@ -275,6 +273,7 @@ class SwitchbotBle extends utils.Adapter {
 
     async scanDevices() {
         this.switchbot.startScan().then(() => {
+            this.setIsBusy(true);
             this.switchbot.onadvertisement = (data) => {
                 if (!this.switchbotDevice[data.address]) {
                     (async () => {
@@ -294,8 +293,10 @@ class SwitchbotBle extends utils.Adapter {
             return this.switchbot.wait(this.scanDevicesWait);
         }).then(() => {
             this.switchbot.stopScan();
+            this.setIsBusy(false);
         }).catch((error) => {
             this.log.error(`[scanDevices] error: ${error}`);
+            this.setIsBusy(false);
         });
     }
 
