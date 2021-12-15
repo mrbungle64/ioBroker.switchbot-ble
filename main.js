@@ -264,7 +264,8 @@ class SwitchbotBle extends utils.Adapter {
             this.log.warn(`[botAction] error while running cmd ${cmd} for ${helper.getProductName(model)} (${macAddress}): ${error.toString()}`);
             if (this.retries < this.maxRetriesDeviceAction) {
                 this.retries++;
-                this.log.info(`[botAction] will try again in ${this.waitingTimeRetries} ms (${this.retries}/${this.maxRetriesDeviceAction}) ...`);
+                this.log.info(`[botAction] will try again (${this.retries}/${this.maxRetriesDeviceAction}) ...`);
+                this.commandQueue.add(cmd, macAddress, value);
             } else {
                 this.log.warn(`[botAction] max. retries (${this.maxRetriesDeviceAction}) reached. Giving up ...`);
                 this.retries = 0;
