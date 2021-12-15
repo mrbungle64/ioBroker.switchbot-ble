@@ -156,6 +156,7 @@ class SwitchbotBle extends utils.Adapter {
     }
 
     async botAction(cmd, macAddress, model = 'H', value = null) {
+        this.setIsBusy(true);
         let bot = null;
         this.switchbot.discover({
             id: macAddress,
@@ -200,6 +201,7 @@ class SwitchbotBle extends utils.Adapter {
             this.retries = 0;
             return bot.disconnect();
         }).then(() => {
+            this.setIsBusy(false);
             let on = false;
             switch (cmd) {
                 case 'turnOn':
@@ -250,11 +252,14 @@ class SwitchbotBle extends utils.Adapter {
                 this.setStateConditional(macAddress + '.on', on, true);
             }
         }).catch((error) => {
+            this.setIsBusy(false);
             this.log.warn(`[botAction] error while running cmd ${cmd} for ${helper.getProductName(model)} (${macAddress}): ${error.toString()}`);
             if (this.retries < this.maxRetriesDeviceAction) {
                 this.retries++;
                 this.log.info(`[botAction] will try again (${this.retries}/${this.maxRetriesDeviceAction}) ...`);
-                this.commandQueue.addRetry(cmd, macAddress, value);
+                setTimeout(() => {
+                    this.botAction(cmd, macAddress, model, value);
+                }, 250);
             } else {
                 this.log.warn(`[botAction] max. retries (${this.maxRetriesDeviceAction}) reached. Giving up ...`);
                 this.retries = 0;
