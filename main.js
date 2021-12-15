@@ -21,7 +21,7 @@ class SwitchbotBle extends utils.Adapter {
 
         this.switchbot = new Switchbot();
 
-        this.cmdInterval = 15000;
+        this.interval = 15000;
         this.scanDevicesWait = 3000;
         this.pressDevicesWait = 5000;
         this.waitingTimeRetries = 2000;
@@ -60,19 +60,17 @@ class SwitchbotBle extends utils.Adapter {
                     this.setIsBusy(false);
                 }
             })().catch((error) => {
-                this.log.error(`[scanDevices] error while scanning devices: ${error}`);
+                this.log.error(`[scanDevicesInterval] error while scanning devices: ${error}`);
             });
         }, this.interval);
 
         this.commandInterval = setInterval(() => {
             (async () => {
                 if (!this.isBusy) {
-                    this.setIsBusy(true);
                     await this.commandQueue.runAll();
-                    this.setIsBusy(false);
                 }
             })().catch((error) => {
-                this.log.error(`[scanDevices] error while running command: ${error}`);
+                this.log.error(`[commandInterval] error while running command: ${error}`);
             });
         }, 500);
 
