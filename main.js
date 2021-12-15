@@ -167,15 +167,11 @@ class SwitchbotBle extends utils.Adapter {
             if (typeof bot === 'undefined') {
                 return Promise.reject('Discover deviceList is empty!');
             }
-
-            if (this.retries < 1) {
-                this.log.info(`[botAction] trying to executing command: ${cmd}`);
-                if (value) {
-                    this.log.info(`[botAction] with given value: ${value}`);
-                }
+            let logMsg = `[botAction] connecting to ${helper.getProductName(model)} (${macAddress}) for executing command ${cmd}`;
+            if (value) {
+                logMsg = `${logMsg} with given value ${value}`;
             }
-
-            this.log.info(`[botAction] connecting to ${helper.getProductName(model)} (${macAddress}) ...`);
+            this.log.debug(logMsg);
             return bot.connect();
         }).then(() => {
             switch (cmd) {
@@ -200,6 +196,9 @@ class SwitchbotBle extends utils.Adapter {
                 default:
                     throw new Error(`Unhandled control cmd ${cmd} for ${helper.getProductName(model)} (${macAddress})`);
             }
+        }).then(() => {
+            this.retries = 0;
+            return bot.disconnect();
         }).then(() => {
             let on = false;
             switch (cmd) {
@@ -250,8 +249,6 @@ class SwitchbotBle extends utils.Adapter {
                 this.setStateConditional(macAddress + '.' + cmd, on, true);
                 this.setStateConditional(macAddress + '.on', on, true);
             }
-            bot.disconnect();
-            this.retries = 0;
         }).catch((error) => {
             this.log.warn(`[botAction] error while running cmd ${cmd} for ${helper.getProductName(model)} (${macAddress}): ${error.toString()}`);
             if (this.retries < this.maxRetriesDeviceAction) {
