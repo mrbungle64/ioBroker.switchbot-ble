@@ -123,7 +123,7 @@ class SwitchbotBle extends utils.Adapter {
         switch (cmd) {
             case 'turnOn':
                 if (on) {
-                    this.log.info(`[deviceAction] device ${macAddress} already turned on`);
+                    this.log.info(`[deviceAction] ${helper.getProductName('H')} (${macAddress}) already turned on`);
                     return;
                 } else {
                     await this.botAction(cmd, macAddress, 'H');
@@ -131,7 +131,7 @@ class SwitchbotBle extends utils.Adapter {
                 }
             case 'turnOff':
                 if (!on) {
-                    this.log.info(`[deviceAction] device ${macAddress} already turned off`);
+                    this.log.info(`[deviceAction] ${helper.getProductName('H')} (${macAddress}) already turned off`);
                     return;
                 } else {
                     await this.botAction(cmd, macAddress, 'H');
