@@ -252,7 +252,6 @@ class SwitchbotBle extends utils.Adapter {
                 this.setStateConditional(macAddress + '.on', on, true);
             }
         }).catch((error) => {
-            this.setIsBusy(false);
             this.log.warn(`[botAction] error while running cmd ${cmd} for ${helper.getProductName(model)} (${macAddress}): ${error.toString()}`);
             if (this.retries < this.maxRetriesDeviceAction) {
                 this.retries++;
@@ -263,6 +262,7 @@ class SwitchbotBle extends utils.Adapter {
             } else {
                 this.log.warn(`[botAction] max. retries (${this.maxRetriesDeviceAction}) reached. Giving up ...`);
                 this.retries = 0;
+                this.setIsBusy(false);
             }
         });
     }
