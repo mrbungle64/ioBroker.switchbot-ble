@@ -254,8 +254,6 @@ class SwitchbotBle extends utils.Adapter {
                 this.setStateConditional(macAddress + '.' + cmd, on, true);
                 this.setStateConditional(macAddress + '.on', on, true);
             }
-            return this.switchbot.wait(1000);
-        }).then(() => {
             bot.disconnect();
             this.retries = 0;
         }).catch((error) => {
