@@ -99,7 +99,7 @@ class SwitchbotBle extends utils.Adapter {
                     return;
                 }
                 const cmd = stateName;
-                this.log.debug(`[onStateChange] received command: ${cmd}`);
+                this.log.debug(`[onStateChange] received command: '${cmd}'`);
                 switch (cmd) {
                     case 'inverseOnOff':
                         this.inverseOnOff[macAddress] = state.val;
@@ -151,7 +151,7 @@ class SwitchbotBle extends utils.Adapter {
                 await this.botAction(cmd, macAddress, 'c', value);
                 break;
             default:
-                this.log.debug(`[deviceAction] unhandled control cmd ${cmd} for device ${macAddress}`);
+                this.log.debug(`[deviceAction] unhandled control cmd '${cmd}' for device ${macAddress}`);
         }
     }
 
@@ -168,7 +168,7 @@ class SwitchbotBle extends utils.Adapter {
             if (typeof bot === 'undefined') {
                 return Promise.reject('Discover deviceList is empty!');
             }
-            let logMsg = `[botAction] connecting to ${helper.getProductName(model)} (${macAddress}) for executing command ${cmd}`;
+            let logMsg = `[botAction] connecting to ${helper.getProductName(model)} (${macAddress}) for executing command '${cmd}'`;
             if (value) {
                 logMsg = `${logMsg} with given value ${value}`;
             }
@@ -195,7 +195,7 @@ class SwitchbotBle extends utils.Adapter {
                 case 'runToPos':
                     return bot.runToPos(value);
                 default:
-                    throw new Error(`Unhandled control cmd ${cmd} for ${helper.getProductName(model)} (${macAddress})`);
+                    throw new Error(`Unhandled control cmd '${cmd}' for ${helper.getProductName(model)} (${macAddress})`);
             }
         }).then(() => {
             this.retries = 0;
@@ -239,11 +239,11 @@ class SwitchbotBle extends utils.Adapter {
                 case 'open':
                 case 'close':
                 case 'pause':
-                    this.log.info(`[botAction] successfully sent ${cmd} command to ${helper.getProductName(model)} (${macAddress})`);
+                    this.log.info(`[botAction] successfully sent '${cmd}' command to ${helper.getProductName(model)} (${macAddress})`);
                     this.setStateConditional(macAddress + '.control.' + cmd, false, true);
                     break;
                 case 'runToPos':
-                    this.log.info(`[botAction] successfully sent ${cmd} command to ${helper.getProductName(model)} (${macAddress}) with value ${value}`);
+                    this.log.info(`[botAction] successfully sent '${cmd}' command to ${helper.getProductName(model)} (${macAddress}) with value ${value}`);
                     break;
             }
             if (model === 'H') {
@@ -254,12 +254,12 @@ class SwitchbotBle extends utils.Adapter {
         }).catch((error) => {
             if (this.retries < this.maxRetriesDeviceAction) {
                 this.retries++;
-                this.log.warn(`[botAction] error while running ${cmd} for ${helper.getProductName(model)} (${macAddress}): ${error.toString()}. Will try again (${this.retries}/${this.maxRetriesDeviceAction}) ...`);
+                this.log.warn(`[botAction] Will try again (${this.retries}/${this.maxRetriesDeviceAction}) executing '${cmd}' for ${helper.getProductName(model)} (${macAddress}): ${error.toString()}`);
                 setTimeout(() => {
                     this.botAction(cmd, macAddress, model, value);
                 }, 250);
             } else {
-                this.log.warn(`[botAction] error while running ${cmd} for ${helper.getProductName(model)} (${macAddress}): ${error.toString()}`);
+                this.log.warn(`[botAction] error while running '${cmd}' for ${helper.getProductName(model)} (${macAddress}): ${error.toString()}`);
                 this.log.error(`[botAction] max. retries (${this.maxRetriesDeviceAction}) reached. Giving up ...`);
                 this.retries = 0;
                 this.setIsBusy(false);
