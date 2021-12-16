@@ -99,7 +99,7 @@ class SwitchbotBle extends utils.Adapter {
                     return;
                 }
                 const cmd = stateName;
-                this.log.silly(`[onStateChange] received command: ${cmd}`);
+                this.log.debug(`[onStateChange] received command: ${cmd}`);
                 switch (cmd) {
                     case 'inverseOnOff':
                         this.inverseOnOff[macAddress] = state.val;
