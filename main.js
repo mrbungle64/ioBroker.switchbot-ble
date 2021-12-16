@@ -254,12 +254,14 @@ class SwitchbotBle extends utils.Adapter {
         }).catch((error) => {
             if (this.retries < this.maxRetriesDeviceAction) {
                 this.retries++;
-                this.log.warn(`[botAction] Will try again (${this.retries}/${this.maxRetriesDeviceAction}) executing '${cmd}' for ${helper.getProductName(model)} (${macAddress}): ${error.toString()}`);
+                const logMsg = `[botAction] Will try again (${this.retries}/${this.maxRetriesDeviceAction}) executing '${cmd}' for ${helper.getProductName(model)} (${macAddress})`;
+                this.log.warn(`${logMsg}: ${error.toString()}`);
                 setTimeout(() => {
                     this.botAction(cmd, macAddress, model, value);
                 }, 250);
             } else {
-                this.log.warn(`[botAction] error while running '${cmd}' for ${helper.getProductName(model)} (${macAddress}): ${error.toString()}`);
+                const logMsg = `[botAction] error while running '${cmd}' for ${helper.getProductName(model)} (${macAddress}): ${error.toString()}`;
+                this.log.warn(`${logMsg}: ${error.toString()}`);
                 this.log.error(`[botAction] max. retries (${this.maxRetriesDeviceAction}) reached. Giving up ...`);
                 this.retries = 0;
                 this.setIsBusy(false);
