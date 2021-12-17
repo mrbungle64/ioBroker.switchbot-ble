@@ -82,6 +82,9 @@ sudo setcap cap_net_raw+eip $(eval readlink -f `which node`)
 
 ## Changelog
 
+### 0.3.5
+* Improved handling of controls and tasks
+
 ### 0.3.4
 * Several improvements to control the bots
 * Add new options to adapter config
