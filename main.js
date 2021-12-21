@@ -132,7 +132,7 @@ class SwitchbotBle extends utils.Adapter {
 
     async deviceAction(cmd, macAddress, value = null) {
         if (!Object.keys(this.switchbotDevice).includes(macAddress)) {
-            this.log.debug(`[deviceAction] MAC-Adresse (${macAddress}) does not exist!`);
+            this.log.debug(`[deviceAction] MAC address (${macAddress}) does not exist!`);
             return;
         }
 
@@ -193,6 +193,7 @@ class SwitchbotBle extends utils.Adapter {
             return bot.connect();
         }).then(() => {
             switch (cmd) {
+                // SwitchBot "Bot"
                 case 'turnOn':
                     return bot.turnOn();
                 case 'turnOff':
@@ -203,6 +204,7 @@ class SwitchbotBle extends utils.Adapter {
                     return bot.up();
                 case 'down':
                     return bot.down();
+                // SwitchBot "Curtain"
                 case 'open':
                     return bot.open();
                 case 'close':
@@ -340,7 +342,7 @@ class SwitchbotBle extends utils.Adapter {
                 this.setStateConditional(data.address + '.deviceInfo.state', data.serviceData.state, true);
                 const state = await this.getStateAsync(data.address + '.control.inverseOnOff');
                 if (state) {
-                    this.inverseOnOff[data.address] = state.val;
+                    this.inverseOnOff[data.address] = !!state.val;
                     this.switchbotDevice[data.address].on = this.getOnStateValue(data);
                     this.setStateConditional(data.address + '.on', this.switchbotDevice[data.address].on, true);
                 }
