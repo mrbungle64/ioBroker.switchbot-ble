@@ -62,9 +62,9 @@ See the documentation of [@abandonware/noble](https://github.com/abandonware/nob
 
 * If you use the "Bot" in "Switch Mode" 
   the value of the state "control.inverseOnOff" should be the same as "Inverse the on/off direction" in the app.
-  This is not automatically synchronized.
+  This cannot be synchronized automatically.
 
-#### All devices
+#### All models
 
 * The battery data is marked as experimental in the library for now.
   So there's no guarantee that the value is correct.
@@ -81,6 +81,9 @@ sudo setcap cap_net_raw+eip $(eval readlink -f `which node`)
 ```
 
 ## Changelog
+
+### 0.3.6
+* (patrickbs96) Some improvements and fixes
 
 ### 0.3.5
 * Improved handling of controls and tasks
