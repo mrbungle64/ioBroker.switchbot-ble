@@ -25,8 +25,20 @@ class SwitchbotBle extends utils.Adapter {
         this.scanDevicesWait = 3000;
         this.pressDevicesWait = 5000;
         this.maxRetriesDeviceAction = 15;
-        this.inverseOnOff = [];
-        this.switchbotDevice = [];
+
+        /**
+         * @type {{[mac: String]: Boolean}}
+         */
+        this.inverseOnOff = {};
+
+        /**
+         * @type {{[mac: String]: {address: String, rssi: Number, id: String,
+         *                         serviceData: {model: 'H'|'T'|'c'|'s'|'d', modelName: String, battery: Number, state: Boolean, mode: Boolean,
+         *                                       temperature: {c: Number, f: Number}, humidity: Number,
+         *                                       position: Number, calibration: Number, lightLevel: Number, movement: Boolean, doorState: String},
+         *                         on: Boolean}}}
+         */
+        this.switchbotDevice = {};
         this.retries = 0;
 
         this.commandQueue = new Queue(this, 'commandQueue');
@@ -119,7 +131,12 @@ class SwitchbotBle extends utils.Adapter {
     }
 
     async deviceAction(cmd, macAddress, value = null) {
-        const on = this.switchbotDevice[macAddress]['on'];
+        if (!Object.keys(this.switchbotDevice).includes(macAddress)) {
+            this.log.debug(`[deviceAction] MAC-Adresse (${macAddress}) does not exist!`);
+            return;
+        }
+
+        const on = this.switchbotDevice[macAddress].on;
         switch (cmd) {
             case 'turnOn':
                 if (on) {
@@ -247,7 +264,7 @@ class SwitchbotBle extends utils.Adapter {
                     break;
             }
             if (model === 'H') {
-                this.switchbotDevice[macAddress]['on'] = on;
+                this.switchbotDevice[macAddress].on = on;
                 this.setStateConditional(macAddress + '.' + cmd, on, true);
                 this.setStateConditional(macAddress + '.on', on, true);
             }
@@ -273,10 +290,11 @@ class SwitchbotBle extends utils.Adapter {
         this.switchbot.startScan().then(() => {
             this.setIsBusy(true);
             this.switchbot.onadvertisement = (data) => {
-                if (!this.switchbotDevice[data.address]) {
+                if (!Object.keys(this.switchbotDevice).includes(data.address)) {
                     (async () => {
                         await this.createBotObjects(data);
                         this.switchbotDevice[data.address] = data;
+                        this.switchbotDevice[data.address].on = this.getOnStateValue(data);
                         this.log.info(`[scanDevices] device detected: ${helper.getProductName(data.serviceData.model)} (${data.address})`);
                     })().catch((error) => {
                         this.log.error(`[scanDevices] error while creating objects: ${error}`);
@@ -323,8 +341,8 @@ class SwitchbotBle extends utils.Adapter {
                 const state = await this.getStateAsync(data.address + '.control.inverseOnOff');
                 if (state) {
                     this.inverseOnOff[data.address] = state.val;
-                    this.switchbotDevice[data.address]['on'] = this.getOnStateValue(data);
-                    this.setStateConditional(data.address + '.on', this.switchbotDevice[data.address]['on'], true);
+                    this.switchbotDevice[data.address].on = this.getOnStateValue(data);
+                    this.setStateConditional(data.address + '.on', this.switchbotDevice[data.address].on, true);
                 }
             } else if (data.serviceData.model === 'T') {
                 // SwitchBot Meter (WoSensorTH)
@@ -348,11 +366,10 @@ class SwitchbotBle extends utils.Adapter {
     }
 
     getOnStateValue(data) {
-        let on = data.serviceData.state;
         if (this.inverseOnOff[data.address] === true) {
-            on = !data.serviceData.state;
+            return !data.serviceData.state;
         }
-        return on;
+        return data.serviceData.state;
     }
 
     setStateConditional(stateId, value, ack = true) {
