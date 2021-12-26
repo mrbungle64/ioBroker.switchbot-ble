@@ -48,15 +48,16 @@ class SwitchbotBle extends utils.Adapter {
     async onReady() {
         this.setState('info.connection', false, true);
 
+        // Interval for scanning devices
         this.interval = Number(this.config.interval) || this.interval;
-        this.log.debug(`Init cmdInterval: ${this.interval}`);
-
+        this.log.debug(`Init interval: ${this.interval}`);
+        // Waiting time while scanning devices
         this.scanDevicesWait = Number(this.config.scanDevicesWait) || this.scanDevicesWait;
         this.log.debug(`Init scanDevicesWait: ${this.scanDevicesWait}`);
-
+        // Waiting time for the discovery when controlling the bot
         this.pressDevicesWait = Number(this.config.pressDevicesWait) || this.pressDevicesWait;
         this.log.debug(`Init pressDevicesWait: ${this.pressDevicesWait}`);
-
+        // Waiting time for retries
         this.maxRetriesDeviceAction = Number(this.config.maxRetriesDeviceAction) || this.maxRetriesDeviceAction;
         this.log.debug(`Init maxRetriesDeviceAction: ${this.maxRetriesDeviceAction}`);
 
