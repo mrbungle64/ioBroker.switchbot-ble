@@ -319,7 +319,7 @@ class SwitchbotBle extends utils.Adapter {
                     });
                 }
                 (async () => {
-                    await this.setStateValues(data);
+                    await this.setAdvertisementData(data);
                 })().catch((error) => {
                     this.log.error(`[scanDevices] error while set state values: ${error}`);
                 });
@@ -332,55 +332,6 @@ class SwitchbotBle extends utils.Adapter {
             this.log.error(`[scanDevices] error: ${error}`);
             this.setIsBusy(false);
         });
-    }
-
-    /**
-     *
-     * @param {{address: String, rssi: Number, id: String,
-     *          serviceData: {model: 'H'|'T'|'c'|'s'|'d', modelName: String, battery: Number, state: Boolean, mode: Boolean,
-     *                        temperature: {c: Number, f: Number}, humidity: Number,
-     *                        position: Number, calibration: Number, lightLevel: Number, movement: Boolean, doorState: String}}} data
-     */
-    async setStateValues(data) {
-        this.log.silly(`[setStateValues] ${typeof data !== 'undefined' ? JSON.stringify(data) : 'null'}`);
-
-        if (data.serviceData) {
-            this.setStateConditional('info.connection', true, true);
-            this.setStateConditional(data.address + '.deviceInfo.rssi', data.rssi, true);
-            this.setStateConditional(data.address + '.deviceInfo.id', data.id, true);
-            this.setStateConditional(data.address + '.deviceInfo.model', data.serviceData.model, true);
-            this.setStateConditional(data.address + '.deviceInfo.modelName', data.serviceData.modelName, true);
-            this.setStateConditional(data.address + '.deviceInfo.productName', helper.getProductName(data.serviceData.model), true);
-            this.setStateConditional(data.address + '.deviceInfo.battery', data.serviceData.battery, true);
-            if (data.serviceData.model === 'H') {
-                // SwitchBot Bot (WoHand)
-                this.setStateConditional(data.address + '.deviceInfo.switchMode', data.serviceData.mode, true);
-                this.setStateConditional(data.address + '.deviceInfo.state', data.serviceData.state, true);
-                const state = await this.getStateAsync(data.address + '.control.inverseOnOff');
-                if (state) {
-                    this.inverseOnOff[data.address] = !!state.val;
-                    this.switchbotDevice[data.address].on = this.getOnStateValue(data);
-                    this.setStateConditional(data.address + '.on', this.switchbotDevice[data.address].on, true);
-                }
-            } else if (data.serviceData.model === 'T') {
-                // SwitchBot Meter (WoSensorTH)
-                this.setStateConditional(data.address + '.temperature', data.serviceData.temperature.c, true);
-                this.setStateConditional(data.address + '.temperatureF', data.serviceData.temperature.f, true);
-                this.setStateConditional(data.address + '.humidity', data.serviceData.humidity, true);
-            } else if (data.serviceData.model === 'c') {
-                // SwitchBot Curtain (WoCurtain)
-                this.setStateConditional(data.address + '.calibration', data.serviceData.calibration, true);
-                this.setStateConditional(data.address + '.position', data.serviceData.position, true);
-                this.setStateConditional(data.address + '.lightLevel', data.serviceData.lightLevel, true);
-            } else if (data.serviceData.model === 's') {
-                // WoMotion
-                this.setStateConditional(data.address + '.movement', data.serviceData.movement, true);
-                this.setStateConditional(data.address + '.lightLevel', data.serviceData.lightLevel, true);
-            } else if (data.serviceData.model === 'd') {
-                // WoContact
-                this.setStateConditional(data.address + '.doorState', data.serviceData.doorState, true);
-            }
-        }
     }
 
     getOnStateValue(data) {
@@ -411,6 +362,10 @@ class SwitchbotBle extends utils.Adapter {
 
     isNotBusy() {
         return this.isBusy() === false;
+    }
+
+    async setAdvertisementData(data) {
+        await objects.setAdvertisementData(this, data);
     }
 
     async createBotObjects(object) {
