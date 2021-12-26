@@ -231,7 +231,6 @@ class SwitchbotBle extends utils.Adapter {
             this.retries = 0;
             return bot.disconnect();
         }).then(() => {
-            this.setIsBusy(false);
             let on = false;
             switch (cmd) {
                 case 'turnOn':
@@ -281,6 +280,7 @@ class SwitchbotBle extends utils.Adapter {
                 this.setStateConditional(macAddress + '.' + cmd, on, true);
                 this.setStateConditional(macAddress + '.on', on, true);
             }
+            this.setIsBusy(false);
         }).catch((error) => {
             if (this.retries < this.maxRetriesDeviceAction) {
                 this.retries++;
