@@ -76,6 +76,7 @@ class SwitchbotBle extends utils.Adapter {
 
     startCommandInterval() {
         if (!this.commandInterval) {
+            this.log.silly(`[startCommandInterval] starting command interval`);
             this.commandInterval = setInterval(() => {
                 (async () => {
                     if (!this.isBusy) {
@@ -91,6 +92,7 @@ class SwitchbotBle extends utils.Adapter {
     stopCommandInterval(force = false) {
         if (this.commandInterval) {
             if (force || this.commandQueue.isEmpty()) {
+                this.log.silly(`[startCommandInterval] stopping command interval`);
                 clearInterval(this.commandInterval);
                 this.commandInterval = null;
             }
@@ -121,7 +123,6 @@ class SwitchbotBle extends utils.Adapter {
                 if (state.ack) {
                     return;
                 }
-                this.startCommandInterval();
                 const cmd = stateName;
                 this.log.debug(`[onStateChange] received command: '${cmd}'`);
                 switch (cmd) {
