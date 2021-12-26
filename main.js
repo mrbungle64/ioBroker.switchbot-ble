@@ -71,28 +71,38 @@ class SwitchbotBle extends utils.Adapter {
             });
         }, this.interval);
 
-        this.commandInterval = setInterval(() => {
-            (async () => {
-                if (!this.isBusy) {
-                    await this.commandQueue.runAll();
-                }
-            })().catch((error) => {
-                this.log.error(`[commandInterval] error while running command: ${error}`);
-            });
-        }, 500);
-
         this.subscribeStates('*');
+    }
+
+    startCommandInterval() {
+        if (!this.commandInterval) {
+            this.commandInterval = setInterval(() => {
+                (async () => {
+                    if (!this.isBusy) {
+                        await this.commandQueue.runAll();
+                    }
+                })().catch((error) => {
+                    this.log.error(`[commandInterval] error while running command: ${error}`);
+                });
+            }, 100);
+        }
+    }
+
+    stopCommandInterval(force = false) {
+        if (this.commandInterval) {
+            if (force || this.commandQueue.isEmpty()) {
+                clearInterval(this.commandInterval);
+                this.commandInterval = null;
+            }
+        }
     }
 
     onUnload(callback) {
         try {
+            this.stopCommandInterval(true);
             if (this.scanDevicesInterval) {
                 clearInterval(this.scanDevicesInterval);
                 this.scanDevicesInterval = null;
-            }
-            if (this.commandInterval) {
-                clearInterval(this.commandInterval);
-                this.commandInterval = null;
             }
             process.exit();
             callback();
@@ -111,6 +121,7 @@ class SwitchbotBle extends utils.Adapter {
                 if (state.ack) {
                     return;
                 }
+                this.startCommandInterval();
                 const cmd = stateName;
                 this.log.debug(`[onStateChange] received command: '${cmd}'`);
                 switch (cmd) {
@@ -266,6 +277,7 @@ class SwitchbotBle extends utils.Adapter {
                     this.log.info(`[botAction] successfully sent '${cmd}' command to ${helper.getProductName(model)} (${macAddress}) with value ${value}`);
                     break;
             }
+            this.stopCommandInterval(false);
             if (model === 'H') {
                 this.switchbotDevice[macAddress].on = on;
                 this.setStateConditional(macAddress + '.' + cmd, on, true);
@@ -285,6 +297,7 @@ class SwitchbotBle extends utils.Adapter {
                 this.log.error(`[botAction] max. retries (${this.maxRetriesDeviceAction}) reached. Giving up ...`);
                 this.retries = 0;
                 this.setIsBusy(false);
+                this.stopCommandInterval(false);
             }
         });
     }
