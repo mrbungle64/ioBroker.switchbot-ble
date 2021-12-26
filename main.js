@@ -278,7 +278,6 @@ class SwitchbotBle extends utils.Adapter {
                     this.log.info(`[botAction] successfully sent '${cmd}' command to ${helper.getProductName(model)} (${macAddress}) with value ${value}`);
                     break;
             }
-            this.stopCommandInterval(false);
             if (model === 'H') {
                 this.switchbotDevice[macAddress].on = on;
                 this.setStateConditional(macAddress + '.' + cmd, on, true);
@@ -289,9 +288,13 @@ class SwitchbotBle extends utils.Adapter {
                 this.retries++;
                 const logMsg = `[botAction] Will try again (${this.retries}/${this.maxRetriesDeviceAction}) executing '${cmd}' for ${helper.getProductName(model)} (${macAddress})`;
                 this.log.warn(`${logMsg}: ${error.toString()}`);
+                let retryMilliseconds = 250;
+                if (error.toString().toLowerCase().includes('wait for a few seconds')) {
+                    retryMilliseconds = 1000;
+                }
                 setTimeout(() => {
                     this.botAction(cmd, macAddress, model, value);
-                }, 250);
+                }, retryMilliseconds);
             } else {
                 const logMsg = `[botAction] error while running '${cmd}' for ${helper.getProductName(model)} (${macAddress}): ${error.toString()}`;
                 this.log.warn(`${logMsg}: ${error.toString()}`);
