@@ -82,6 +82,10 @@ sudo setcap cap_net_raw+eip $(eval readlink -f `which node`)
 
 ## Changelog
 
+### 0.3.7
+* Some minor improvements
+* Some refactoring
+
 ### 0.3.6
 * (patrickbs96) Some improvements and fixes
 
