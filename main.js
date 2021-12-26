@@ -42,7 +42,7 @@ class SwitchbotBle extends utils.Adapter {
         this.retries = 0;
 
         this.commandQueue = new Queue(this, 'commandQueue');
-        this.isBusy = false;
+        this.busy = false;
     }
 
     async onReady() {
@@ -63,7 +63,7 @@ class SwitchbotBle extends utils.Adapter {
 
         this.scanDevicesInterval = setInterval(() => {
             (async () => {
-                if (!this.isBusy) {
+                if (this.isNotBusy()) {
                     await this.scanDevices();
                 }
             })().catch((error) => {
@@ -79,7 +79,7 @@ class SwitchbotBle extends utils.Adapter {
             this.log.silly(`[startCommandInterval] starting command interval`);
             this.commandInterval = setInterval(() => {
                 (async () => {
-                    if (!this.isBusy) {
+                    if (this.isNotBusy()) {
                         await this.commandQueue.runAll();
                     }
                 })().catch((error) => {
@@ -154,19 +154,17 @@ class SwitchbotBle extends utils.Adapter {
             case 'turnOn':
                 if (on) {
                     this.log.info(`[deviceAction] ${helper.getProductName('H')} (${macAddress}) already turned on`);
-                    return;
                 } else {
                     await this.botAction(cmd, macAddress, 'H');
-                    break;
                 }
+                break;
             case 'turnOff':
                 if (!on) {
                     this.log.info(`[deviceAction] ${helper.getProductName('H')} (${macAddress}) already turned off`);
-                    return;
                 } else {
                     await this.botAction(cmd, macAddress, 'H');
-                    break;
                 }
+                break;
             case 'press':
             case 'up':
             case 'down':
@@ -403,8 +401,16 @@ class SwitchbotBle extends utils.Adapter {
     }
 
     setIsBusy(isBusy) {
-        this.isBusy = isBusy;
-        this.log.debug(`[setIsBusy] busy: ${this.isBusy}`);
+        this.busy = isBusy;
+        this.log.debug(`[setIsBusy] busy: ${isBusy}`);
+    }
+
+    isBusy() {
+        return this.busy;
+    }
+
+    isNotBusy() {
+        return this.isBusy() === false;
     }
 
     async createBotObjects(object) {
