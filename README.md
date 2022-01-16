@@ -52,7 +52,6 @@ See the documentation of [@abandonware/noble](https://github.com/abandonware/nob
 #### Other models
 
 * SwitchBot "Curtain" (experimental)
-* SwitchBot "Contact" and "Motion" (implemented, but does not work yet due to a [bug](https://github.com/OpenWonderLabs/homebridge-switchbot/issues/104#issuecomment-979372200) in the library)
 
 ## Usage
 
@@ -133,7 +132,7 @@ sudo setcap cap_net_raw+eip $(eval readlink -f `which node`)
 ## License
 MIT License
 
-Copyright (c) 2021 Sascha Hölzel <mrb1232@posteo.de>
+Copyright (c) 2022 Sascha Hölzel <mrb1232@posteo.de>
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
