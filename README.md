@@ -2,6 +2,9 @@
 
 # Switchbot (BLE) adapter for ioBroker
 
+![Number of Installations](http://iobroker.live/badges/switchbot-ble-installed.svg)
+[![github-workflow](https://github.com/mrbungle64/iobroker.switchbot-ble/actions/workflows/node.js.yml/badge.svg)](https://github.com/mrbungle64/iobroker.ecovacs-deebot)
+
 This adapter allows you to control your SwitchBot "Bot" and to monitor the temperature/humidity from SwitchBot "Meter" via Bluetooth (BLE).
 
 ## Before you install
