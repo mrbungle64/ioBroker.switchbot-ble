@@ -16,7 +16,7 @@
     "url": "https://github.com/mrbungle64/ioBroker.switchbot-ble"
   },
   "dependencies": {
-    "@iobroker/adapter-core": "^2.5.1",
+    "@iobroker/adapter-core": "^2.6.0",
     "node-switchbot": "1.1.2",
     "@abandonware/noble": "1.9.2-15"
   },
