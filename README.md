@@ -85,9 +85,9 @@ sudo setcap cap_net_raw+eip $(eval readlink -f `which node`)
 
 ## Changelog
 
-### 0.3.9
-* Bump node-switchbot to 1.1.3-beta.7
+### 0.4.0
 * Add support for Switchbot "Contact" and "Motion"
+* Bump node-switchbot to 1.1.3-beta.7
 
 ### 0.3.8
 * Bumped follow-redirects to 1.14.7 (fix for CVE-2022-0155) and some other dependencies
