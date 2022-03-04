@@ -85,9 +85,13 @@ sudo setcap cap_net_raw+eip $(eval readlink -f `which node`)
 
 ## Changelog
 
+### 0.4.1
+* Bumped node-switchbot to 1.2.0
+  * Fix for Curtains on Firmware v3.3 and above
+
 ### 0.4.0
-* Add support for Switchbot "Contact" and "Motion"
-* Bump node-switchbot to 1.1.3-beta.7
+* Bumped node-switchbot to 1.1.3-beta.7
+  * Added support for Switchbot "Contact" and "Motion"
 
 ### 0.3.8
 * Bumped follow-redirects to 1.14.7 (fix for CVE-2022-0155) and some other dependencies
@@ -104,7 +108,7 @@ sudo setcap cap_net_raw+eip $(eval readlink -f `which node`)
 
 ### 0.3.4
 * Several improvements to control the bots
-* Add new options to adapter config
+* Added new options to adapter config
 
 ### 0.3.3
 * Implemented max retries limit (15)
@@ -116,22 +120,22 @@ sudo setcap cap_net_raw+eip $(eval readlink -f `which node`)
 * Add new option to adapter settings
 
 ### 0.3.0
-* Remove "switchbot" dependency
-* Bump the required Node.js version to 12
-* Bump node-switchbot to 1.1.2
-* Bump some other dependencies
+* Removed "switchbot" dependency
+* Bumped the required Node.js version to 12
+* Bumped node-switchbot to 1.1.2
+* Bumped some other dependencies
 
 ### 0.2.3
 * Some minor changes
 
 ### 0.2.2
-* Bump node-switchbot to 1.0.6
+* Bumped node-switchbot to 1.0.6
 
 ### 0.2.1
-* Bump node-switchbot to 1.0.3
+* Bumped node-switchbot to 1.0.3
 
 ### 0.2.0
-* Bump node-switchbot to 1.0.0
+* Bumped node-switchbot to 1.0.0
 
 ### 0.0.1 - 0.1.0
 * Support for SwitchBot Bot and Meter
