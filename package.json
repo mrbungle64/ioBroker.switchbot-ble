@@ -9,7 +9,14 @@
   "homepage": "https://github.com/mrbungle64/ioBroker.switchbot-ble",
   "license": "MIT",
   "keywords": [
-    "SwitchBot"
+    "iobroker",
+    "switchbot",
+    "robot",
+    "curtain",
+    "contact",
+    "motion",
+    "smart home",
+    "home automation"
   ],
   "repository": {
     "type": "git",
