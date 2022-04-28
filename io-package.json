@@ -108,7 +108,8 @@
         "scanDevicesWait": "",
         "pressDevicesWait": "",
         "waitingTimeRetries": "",
-        "maxRetriesDeviceAction": ""
+        "maxRetriesDeviceAction": "",
+        "hciDeviceId": "0"
     },
     "objects": [],
     "instanceObjects": [

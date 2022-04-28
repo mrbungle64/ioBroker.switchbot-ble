@@ -35,5 +35,9 @@ systemDictionary = {
     'maxRetriesDeviceAction': {
         'en': 'Max. number of retries for executing commands (e.g. press, open, runToPos)',
         'de': 'Max. Anzahl von Wiederholungsversuchen für das Ausführen von Befehlen (z.B. press, open, runToPos)',
+    },
+    'hciDeviceId': {
+        'de': 'Bluetooth Gerät-Nummer (hciX)',
+        'en': 'Bluetooth device number (hciX)'
     }
 };

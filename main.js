@@ -25,6 +25,7 @@ class SwitchbotBle extends utils.Adapter {
         this.scanDevicesWait = 3000;
         this.pressDevicesWait = 5000;
         this.maxRetriesDeviceAction = 15;
+        this.hciDeviceId = '0';
 
         /**
          * @type {{[mac: String]: Boolean}}
@@ -60,6 +61,10 @@ class SwitchbotBle extends utils.Adapter {
         // Waiting time for retries
         this.maxRetriesDeviceAction = Number(this.config.maxRetriesDeviceAction) || this.maxRetriesDeviceAction;
         this.log.debug(`Init maxRetriesDeviceAction: ${this.maxRetriesDeviceAction}`);
+
+        this.hciDeviceId = this.config.hciDeviceId.toString() || this.hciDeviceId;
+        this.log.debug(`Set NOBLE_HCI_DEVICE_ID to hci${this.hciDeviceId}`);
+        process.env.NOBLE_HCI_DEVICE_ID = this.hciDeviceId;
 
         this.scanDevicesInterval = setInterval(() => {
             (async () => {
