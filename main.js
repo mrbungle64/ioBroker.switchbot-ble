@@ -22,12 +22,8 @@ class SwitchbotBle extends utils.Adapter {
         this.scanDevicesWait = 3000;
         this.pressDevicesWait = 5000;
         this.maxRetriesDeviceAction = 15;
-        this.hciDeviceId = '0';
-
-        /**
-         * @type {{[mac: String]: Boolean}}
-         */
         this.inverseOnOff = {};
+        this.hciDeviceId = '0';
 
         /**
          * @type {{[mac: String]: {address: String, rssi: Number, id: String,

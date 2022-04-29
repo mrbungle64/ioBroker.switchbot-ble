@@ -37,7 +37,7 @@ systemDictionary = {
         'de': 'Max. Anzahl von Wiederholungsversuchen für das Ausführen von Befehlen (z.B. press, open, runToPos)',
     },
     'hciDeviceId': {
-        'de': 'Bluetooth Gerät-Nummer (hciX)',
-        'en': 'Bluetooth device number (hciX)'
+        'en': 'Bluetooth device (Host Controller Interface hciX, e.g. hci0)',
+        'de': 'Bluetooth Gerät (Host Controller Schnittstelle hciX, z.B. hci0)'
     }
 };
