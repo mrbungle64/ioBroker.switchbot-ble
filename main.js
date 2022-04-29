@@ -1,7 +1,6 @@
 'use strict';
 
 const utils = require('@iobroker/adapter-core');
-const Switchbot = require('node-switchbot');
 const helper = require('./lib/adapterHelper');
 const objects = require('./lib/adapterObjects');
 const Queue = require('./lib/adapterQueue');
@@ -18,8 +17,6 @@ class SwitchbotBle extends utils.Adapter {
         this.on('ready', this.onReady.bind(this));
         this.on('stateChange', this.onStateChange.bind(this));
         this.on('unload', this.onUnload.bind(this));
-
-        this.switchbot = new Switchbot();
 
         this.interval = 15000;
         this.scanDevicesWait = 3000;
@@ -65,6 +62,9 @@ class SwitchbotBle extends utils.Adapter {
         this.hciDeviceId = this.config.hciDeviceId.toString() || this.hciDeviceId;
         this.log.debug(`Set NOBLE_HCI_DEVICE_ID to hci${this.hciDeviceId}`);
         process.env.NOBLE_HCI_DEVICE_ID = this.hciDeviceId;
+
+        const Switchbot = require('node-switchbot');
+        this.switchbot = new Switchbot();
 
         this.scanDevicesInterval = setInterval(() => {
             (async () => {
