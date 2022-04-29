@@ -55,8 +55,9 @@ class SwitchbotBle extends utils.Adapter {
         this.maxRetriesDeviceAction = Number(this.config.maxRetriesDeviceAction) || this.maxRetriesDeviceAction;
         this.log.debug(`Init maxRetriesDeviceAction: ${this.maxRetriesDeviceAction}`);
 
+        // Set the NOBLE_HCI_DEVICE_ID environment variable to the interface number
         this.hciDeviceId = this.config.hciDeviceId.toString() || this.hciDeviceId;
-        this.log.debug(`Set NOBLE_HCI_DEVICE_ID to hci${this.hciDeviceId}`);
+        this.log.info(`Set the NOBLE_HCI_DEVICE_ID environment variable to ${this.hciDeviceId} (hci${this.hciDeviceId})`);
         process.env.NOBLE_HCI_DEVICE_ID = this.hciDeviceId;
 
         const Switchbot = require('node-switchbot');
