@@ -86,7 +86,7 @@ sudo setcap cap_net_raw+eip $(eval readlink -f `which node`)
 ## Changelog
 
 ### 0.4.2
-* Add option to change the used Host Controller Interface (hciX)
+* Added option to change the used Host Controller Interface (hciX)
 
 ### 0.4.1
 * Bumped node-switchbot to 1.2.0
