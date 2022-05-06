@@ -94,6 +94,8 @@
         "enabled": true,
         "extIcon": "https://raw.githubusercontent.com/mrbungle64/ioBroker.switchbot-ble/master/admin/switchbot-ble.png",
         "readme": "https://github.com/mrbungle64/ioBroker.switchbot-ble/blob/master/README.md",
+        "connectionType": "local",
+        "dataSource": "poll",
         "loglevel": "info",
         "mode": "daemon",
         "type": "hardware",
