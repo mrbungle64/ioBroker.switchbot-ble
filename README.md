@@ -17,9 +17,9 @@ This adapter may only run on Linux-based operating systems, as the underlying li
 
 ## Installation
 
-It is recommended to use version 12.x or 14.x of Node.js.
+It is recommended to use version 14.x or 16.x of Node.js.
 
-The minimum required version is 12.x
+The minimum required version is 12.x, but support for this version will be dropped soon.
 
 Before installing the adapter, some linux libraries related Bluetooth as follows if the OS is Ubuntu/Debian/Raspbian.
 
