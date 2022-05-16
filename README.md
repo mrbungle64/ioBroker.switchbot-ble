@@ -5,7 +5,7 @@
 ![Number of Installations](http://iobroker.live/badges/switchbot-ble-installed.svg)
 [![github-workflow](https://github.com/mrbungle64/iobroker.switchbot-ble/actions/workflows/node.js.yml/badge.svg)](https://github.com/mrbungle64/iobroker.ecovacs-deebot)
 
-This adapter allows you to control your SwitchBot "Bot" and to monitor the temperature/humidity from SwitchBot "Meter" via Bluetooth (BLE).
+This adapter allows you to control your SwitchBot "Bot" and to monitor SwitchBot "Meter", "Contact" and "Motion" via Bluetooth (BLE).
 
 ## Before you install
 
@@ -50,12 +50,16 @@ See the documentation of [@abandonware/noble](https://github.com/abandonware/nob
 
 * SwitchBot "Bot"
 * SwitchBot "Meter"
-
-#### Other models (experimental)
-
-* SwitchBot "Curtain"
 * SwitchBot "Contact"
 * SwitchBot "Motion"
+
+The models listed are those that I have in use myself.
+
+#### Other models
+
+* SwitchBot "Curtain"
+
+The SwitchBot "Curtain" is known to work, but I don't have one in use myself.
 
 ## Usage
 
@@ -63,14 +67,13 @@ See the documentation of [@abandonware/noble](https://github.com/abandonware/nob
 
 #### SwitchBot "Bot"
 
-* If you use the "Bot" in "Switch Mode" 
-  the value of the state "control.inverseOnOff" should be the same as "Inverse the on/off direction" in the app.
-  This cannot be synchronized automatically.
+If you use the "Bot" in "Switch Mode"
+the value of the state "control.inverseOnOff" should be the same as "Inverse the on/off direction" in the app.
+This cannot be synchronized automatically.
 
 #### All models
 
-* The battery data is marked as experimental in the library for now.
-  So there's no guarantee that the value is correct.
+The battery data is marked as experimental in the library for now. So there's no guarantee that the value is correct.
 
 ## Troubleshooting
 
