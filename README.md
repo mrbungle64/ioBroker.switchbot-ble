@@ -9,19 +9,39 @@ This adapter allows you to control your SwitchBot "Bot" and to monitor SwitchBot
 
 ## Before you install
 
-* If you are looking for Hub Plus/Mini support, [this adapter](https://github.com/DrozmotiX/ioBroker.switchbot-hub) is what you will need
+If you are looking for Hub Plus/Mini support, [this adapter](https://github.com/DrozmotiX/ioBroker.switchbot-hub) is what you will need.
 
-## Supported OS
+## Models
 
-This adapter may only run on Linux-based operating systems, as the underlying library [node-switchbot](https://github.com/OpenWonderLabs/node-switchbot#supported-os) currently only supports Linux-based operating systems such as Raspbian and Ubuntu.
+### Supported models
+
+* SwitchBot "Bot"
+* SwitchBot "Meter"
+* SwitchBot "Contact"
+* SwitchBot "Motion"
+
+The models listed are those that I have in use myself.
+
+#### Other models
+
+* SwitchBot "Curtain"
+
+The SwitchBot "Curtain" is known to work, but I don't have one in use myself.
 
 ## Installation
 
-It is recommended to use version 14.x or 16.x of Node.js.
+### Prerequisites
 
-The minimum required version is 12.x, but support for this version will be dropped soon.
+To use this adapter, you will need to already have [ioBroker](iobroker.net) installed.
 
-Before installing the adapter, some linux libraries related Bluetooth as follows if the OS is Ubuntu/Debian/Raspbian.
+#### Supported OS
+
+This adapter may only run on Linux-based operating systems,
+as the underlying library [node-switchbot](https://github.com/OpenWonderLabs/node-switchbot#supported-os)
+currently only supports Linux-based operating systems such as Raspbian and Ubuntu.
+
+Before installing the adapter, you need to install some Linux libraries related to Bluetooth.
+These are as follows if the operating system is Ubuntu/Debian/Raspbian:
 
 ```bash
 $ sudo apt-get install bluetooth bluez libbluetooth-dev libudev-dev
@@ -44,22 +64,11 @@ sudo apt-get install libcap2-bin
 
 See the documentation of [@abandonware/noble](https://github.com/abandonware/noble#readme) for other details.
 
-## Models
+### Node.js
 
-### Supported models
+It is recommended to use version 14.x or 16.x of [Node.js](nodejs.org).
 
-* SwitchBot "Bot"
-* SwitchBot "Meter"
-* SwitchBot "Contact"
-* SwitchBot "Motion"
-
-The models listed are those that I have in use myself.
-
-#### Other models
-
-* SwitchBot "Curtain"
-
-The SwitchBot "Curtain" is known to work, but I don't have one in use myself.
+The minimum required version is 12.x, but support for this version may will be dropped soon.
 
 ## Usage
 
