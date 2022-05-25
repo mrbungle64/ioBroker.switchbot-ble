@@ -94,13 +94,16 @@ The battery data is marked as experimental in the library for now. So there's no
 If the adapter no longer works, e.g. after a restart or system update, please try the following:
 
 ```bash
-cd /opt/iobroker/node_modules/iobroker.switchbot-ble/
-sudo rm -r node_modules/
-npm install
-sudo setcap cap_net_raw+eip $(eval readlink -f `which node`)
+$ cd /opt/iobroker/node_modules/iobroker.switchbot-ble/
+$ sudo rm -r node_modules/
+$ npm install
+$ sudo setcap cap_net_raw+eip $(eval readlink -f `which node`)
 ```
 
 ## Changelog
+
+### 0.4.3
+* Added new states for lightLevel and doorState
 
 ### 0.4.2
 * Added option to change the used Host Controller Interface (hciX)
