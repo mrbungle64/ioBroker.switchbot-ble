@@ -28,13 +28,11 @@ The models listed are those that I have in use myself.
 
 The SwitchBot "Curtain" is known to work, but I don't have one in use myself.
 
-## Installation
-
-### Prerequisites
+## Prerequisites
 
 To use this adapter, you will need to already have [ioBroker](iobroker.net) installed.
 
-#### Supported OS
+### Supported OS
 
 This adapter may only run on Linux-based operating systems,
 as the underlying library [node-switchbot](https://github.com/OpenWonderLabs/node-switchbot#supported-os)
@@ -50,7 +48,7 @@ $ sudo apt-get install bluetooth bluez libbluetooth-dev libudev-dev
 Running without root/sudo (Linux-specific):
 
 ```bash
-sudo setcap cap_net_raw+eip $(eval readlink -f `which node`)
+$ sudo setcap cap_net_raw+eip $(eval readlink -f `which node`)
 ```
 
 This grants the `node` binary `cap_net_raw` privileges, so it can start/stop BLE advertising.
@@ -59,7 +57,7 @@ __Note:__ The above command requires `setcap` to be installed.
 It can be installed the following way (e.g. Raspbian and Ubuntu):
 
 ```bash
-sudo apt-get install libcap2-bin
+$ sudo apt-get install libcap2-bin
 ```
 
 See the documentation of [@abandonware/noble](https://github.com/abandonware/noble#readme) for other details.
@@ -69,6 +67,13 @@ See the documentation of [@abandonware/noble](https://github.com/abandonware/nob
 It is recommended to use version 14.x or 16.x of [Node.js](nodejs.org).
 
 The minimum required version is 12.x, but support for this version may will be dropped soon.
+
+## Installation
+
+```bash
+$ cd /opt/iobroker/
+$ npm install https://github.com/mrbungle64/ioBroker.switchbot-ble.git
+```
 
 ## Usage
 
