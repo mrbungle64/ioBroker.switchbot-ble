@@ -72,7 +72,7 @@ The minimum required version is 12.x, but support for this version may will be d
 
 ```bash
 $ cd /opt/iobroker/
-$ npm install https://github.com/mrbungle64/ioBroker.switchbot-ble.git
+$ npm install iobroker.switchbot-ble
 ```
 
 ## Usage
