@@ -25,6 +25,7 @@ The models listed are those that I have in use myself.
 #### Other models
 
 * SwitchBot "Curtain"
+* SwitchBot "Meter Plus"
 
 The SwitchBot "Curtain" is known to work, but I don't have one in use myself.
 
@@ -101,6 +102,10 @@ $ sudo setcap cap_net_raw+eip $(eval readlink -f `which node`)
 ```
 
 ## Changelog
+
+### 0.4.4
+* Bumped node-switchbot to 1.3.0
+  * Added support for Switchbot "Meter Plus"
 
 ### 0.4.3
 * Added new states for lightLevel and doorState
