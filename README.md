@@ -27,7 +27,7 @@ The models listed are those that I have in use myself.
 * SwitchBot "Curtain"
 * SwitchBot "Meter Plus"
 
-The SwitchBot "Curtain" is known to work, but I don't have one in use myself.
+These models are known to work, but I don't have them in use myself.
 
 ## Prerequisites
 
@@ -86,10 +86,6 @@ If you use the "Bot" in "Switch Mode"
 the value of the state "control.inverseOnOff" should be the same as "Inverse the on/off direction" in the app.
 This cannot be synchronized automatically.
 
-#### All models
-
-The battery data is marked as experimental in the library for now. So there's no guarantee that the value is correct.
-
 ## Troubleshooting
 
 If the adapter no longer works, e.g. after a restart or system update, please try the following:
@@ -100,6 +96,10 @@ $ sudo rm -r node_modules/
 $ npm install
 $ sudo setcap cap_net_raw+eip $(eval readlink -f `which node`)
 ```
+
+#### Notes
+
+* The battery levels are only approximate values
 
 ## Changelog
 
