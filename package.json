@@ -29,7 +29,7 @@
     "@abandonware/noble": "1.9.2-15"
   },
   "engines": {
-    "node": ">=12"
+    "node": ">=14"
   },
   "devDependencies": {
     "@iobroker/testing": "^4.1.0",
