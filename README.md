@@ -46,7 +46,7 @@ These are as follows if the operating system is Ubuntu/Debian/Raspbian:
 $ sudo apt-get install bluetooth bluez libbluetooth-dev libudev-dev
 ```
 
-Running without root/sudo (Linux-specific):
+You also have to run the following command:
 
 ```bash
 $ sudo setcap cap_net_raw+eip $(eval readlink -f `which node`)
