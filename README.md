@@ -1,6 +1,6 @@
 ![Logo](admin/switchbot-ble.png)
 
-# Switchbot (BLE) adapter for ioBroker
+# SwitchBot (BLE) adapter for ioBroker
 
 ![Number of Installations](http://iobroker.live/badges/switchbot-ble-installed.svg)
 [![github-workflow](https://github.com/mrbungle64/iobroker.switchbot-ble/actions/workflows/node.js.yml/badge.svg)](https://github.com/mrbungle64/iobroker.ecovacs-deebot)
