@@ -4,8 +4,8 @@
         "version": "0.4.5-alpha.0",
         "news": {
             "0.4.5-alpha.0": {
-                "en": "Added support for Switchbot \"Meter Plus\"",
-                "de": "Switchbot \"Meter Plus\" wird nun unterstützt"
+                "en": "Bump dependencies",
+                "de": "Abhängigkeiten aktualisieren"
             },
             "0.4.4": {
                 "en": "Added support for Switchbot \"Meter Plus\"",
