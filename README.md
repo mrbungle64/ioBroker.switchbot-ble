@@ -103,6 +103,9 @@ $ sudo setcap cap_net_raw+eip $(eval readlink -f `which node`)
 
 ## Changelog
 
+### 0.4.5 (alpha)
+* Bumped node-switchbot to 1.6.1
+
 ### 0.4.4
 * Bumped node-switchbot to 1.3.0
   * Added support for Switchbot "Meter Plus"
