@@ -1,6 +1,6 @@
 ![Logo](admin/switchbot-ble.png)
 
-# Switchbot (BLE) adapter for ioBroker
+# SwitchBot (BLE) adapter for ioBroker
 
 ![Number of Installations](http://iobroker.live/badges/switchbot-ble-installed.svg)
 [![github-workflow](https://github.com/mrbungle64/iobroker.switchbot-ble/actions/workflows/node.js.yml/badge.svg)](https://github.com/mrbungle64/iobroker.ecovacs-deebot)
@@ -102,6 +102,9 @@ $ sudo setcap cap_net_raw+eip $(eval readlink -f `which node`)
 * The battery levels are only approximate values
 
 ## Changelog
+
+### 0.4.5 (alpha)
+* Bumped node-switchbot to 1.6.1
 
 ### 0.4.4
 * Bumped node-switchbot to 1.3.0

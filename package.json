@@ -1,6 +1,6 @@
 {
   "name": "iobroker.switchbot-ble",
-  "version": "0.4.4",
+  "version": "0.4.5-alpha.1",
   "description": "SwitchBot BLE adapter for ioBroker",
   "author": {
     "name": "Sascha Hölzel",
@@ -24,8 +24,8 @@
     "url": "https://github.com/mrbungle64/ioBroker.switchbot-ble"
   },
   "dependencies": {
-    "@iobroker/adapter-core": "2.6.6",
-    "node-switchbot": "1.4.1",
+    "@iobroker/adapter-core": "2.6.7",
+    "node-switchbot": "1.6.1",
     "@abandonware/noble": "1.9.2-15"
   },
   "engines": {
@@ -41,7 +41,7 @@
     "@types/proxyquire": "^1.3.28",
     "@types/sinon": "^10.0.13",
     "@types/sinon-chai": "^3.2.8",
-    "axios": "^1.1.3",
+    "axios": "^1.1.2",
     "chai": "^4.3.6",
     "chai-as-promised": "^7.1.1",
     "eslint": "^8.25.0",
