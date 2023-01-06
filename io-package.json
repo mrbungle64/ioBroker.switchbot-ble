@@ -30,62 +30,6 @@
             "0.4.0": {
                 "en": "Added support for Switchbot \"Contact\" and \"Motion\"",
                 "de": "Switchbot \"Contact\" and \"Motion\" werden nun unterstützt"
-            },
-            "0.3.8": {
-                "en": "Bumped some dependencies (incl. fix for CVE-2022-0155)",
-                "de": "Abhängigkeiten aktualisiert (inkl. Fix für CVE-2022-0155)"
-            },
-            "0.3.7": {
-                "en": "Some minor improvements",
-                "de": "Ein paar kleiner Verbesserungen"
-            },
-            "0.3.6": {
-                "en": "Some improvements and fixes",
-                "de": "Ein paar Verbesserungen und Fehlerbehebungen"
-            },
-            "0.3.5": {
-                "en": "Improved handling of controls and tasks",
-                "de": "Verbesserte Behandlung von Funktionen und Aufträgen"
-            },
-            "0.3.4": {
-                "en": "Several improvements to control the bots",
-                "de": "Ein paar Verbesserungen beim Steuern der Bots"
-            },
-            "0.3.3": {
-                "en": "Implemented max retries limit (15)",
-                "de": "Begrenzung max. Wiederholungsversuche implementiert (15)"
-            },
-            "0.3.2": {
-                "en": "Some improvements on handling errors and executing commands",
-                "de": "Ein paar Verbesserungen bei der Behandlung von Fehlern und der Ausführung von Befehlen"
-            },
-            "0.3.1": {
-                "en": "Added new option to adapter settings",
-                "de": "Neue Option den Einstellungen hinzugefügt"
-            },
-            "0.3.0": {
-                "en": "Removed \"switchbot\" dependency",
-                "de": "Abhängigkeit \"switchbot\" entfernt"
-            },
-            "0.2.3": {
-                "en": "Some minor changes",
-                "de": "Ein paar kleinere Änderungen"
-            },
-            "0.2.2": {
-                "en": "Using version 1.0.6 of node-switchbot library",
-                "de": "Benutze Version 1.0.6 von der node-switchbot Library"
-            },
-            "0.2.1": {
-                "en": "Using version 1.0.3 of node-switchbot library",
-                "de": "Benutze Version 1.0.3 von der node-switchbot Library"
-            },
-            "0.2.0": {
-                "en": "Using version 1.0.0 of node-switchbot library",
-                "de": "Benutze Version 1.0.0 von der node-switchbot Library"
-            },
-            "0.1.0": {
-                "en": "Support for SwitchBot Bot and Meter",
-                "de": "Support für SwitchBot Bot und Meter"
             }
         },
         "title": "SwitchBot BLE",
