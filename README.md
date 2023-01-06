@@ -103,6 +103,9 @@ $ sudo setcap cap_net_raw+eip $(eval readlink -f `which node`)
 
 ## Changelog
 
+### 0.4.6
+* Bumped node-switchbot to 1.7.3
+
 ### 0.4.5
 * Bumped node-switchbot to 1.6.1
 
