@@ -65,9 +65,9 @@ See the documentation of [@abandonware/noble](https://github.com/abandonware/nob
 
 ### Node.js
 
-It is recommended to use version 14.x or 16.x of [Node.js](nodejs.org).
+It is recommended to use version 16.x or 18.x of [Node.js](nodejs.org).
 
-The minimum required version is 12.x, but support for this version may will be dropped soon.
+The minimum required version is 16.x, but support for this version may will be dropped soon.
 
 ## Installation
 

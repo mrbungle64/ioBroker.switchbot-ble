@@ -28,7 +28,7 @@
     "node-switchbot": "1.7.2"
   },
   "engines": {
-    "node": ">=14"
+    "node": ">=16"
   },
   "devDependencies": {
     "@iobroker/testing": "^4.1.0",
