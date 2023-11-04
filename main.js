@@ -27,7 +27,7 @@ class SwitchbotBle extends utils.Adapter {
 
         /**
          * @type {{[mac: String]: {address: String, rssi: Number, id: String,
-         *                         serviceData: {model: 'H'|'T'|'c'|'s'|'d'|'i'|'o', modelName: String, battery: Number, state: Boolean, mode: Boolean,
+         *                         serviceData: {model: 'H'|'T'|'c'|'s'|'d'|'i'|'o'|'w', modelName: String, battery: Number, state: Boolean, mode: Boolean,
          *                                       temperature: {c: Number, f: Number}, humidity: Number,
          *                                       position: Number, calibration: Number, lightLevel: Number, movement: Boolean, doorState: String},
          *                         on: Boolean}}}

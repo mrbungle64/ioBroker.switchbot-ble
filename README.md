@@ -65,9 +65,9 @@ See the documentation of [@abandonware/noble](https://github.com/abandonware/nob
 
 ### Node.js
 
-It is recommended to use version 14.x or 16.x of [Node.js](nodejs.org).
+It is recommended to use version 16.x or 18.x of [Node.js](nodejs.org).
 
-The minimum required version is 12.x, but support for this version may will be dropped soon.
+The minimum required version is 16.x, but support for this version may will be dropped soon.
 
 ## Installation
 
@@ -102,6 +102,11 @@ $ sudo setcap cap_net_raw+eip $(eval readlink -f `which node`)
 * The battery levels are only approximate values
 
 ## Changelog
+
+### 0.4.7 (alpha)
+* Breaking change: Bump minimum required version of Node.js to 16.x
+* Bumped node-switchbot to 1.9.0
+* Added Indoor/Outdoor Hygrometer
 
 ### 0.4.6
 * Bumped node-switchbot to 1.7.3
