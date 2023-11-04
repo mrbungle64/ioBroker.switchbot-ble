@@ -103,10 +103,10 @@ $ sudo setcap cap_net_raw+eip $(eval readlink -f `which node`)
 
 ## Changelog
 
-### 0.4.7 (alpha)
+### 0.4.7
 * Breaking change: Bump minimum required version of Node.js to 16.x
 * Bumped node-switchbot to 1.9.0
-* Added Indoor/Outdoor Hygrometer
+  * Added support for SwitchBot "Indoor/Outdoor Thermo-Hygrometer"
 
 ### 0.4.6
 * Bumped node-switchbot to 1.7.3
@@ -183,7 +183,7 @@ $ sudo setcap cap_net_raw+eip $(eval readlink -f `which node`)
 ## License
 MIT License
 
-Copyright (c) 2022 Sascha Hölzel <mrb1232@posteo.de>
+Copyright (c) 2023 Sascha Hölzel <mrb1232@posteo.de>
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
