@@ -103,6 +103,11 @@ $ sudo setcap cap_net_raw+eip $(eval readlink -f `which node`)
 
 ## Changelog
 
+### 0.4.7 (alpha)
+* Breaking change: Bump minimum required version of Node.js to 16.x
+* Bumped node-switchbot to 1.9.0
+* Added Indoor/Outdoor Hygrometer
+
 ### 0.4.6
 * Bumped node-switchbot to 1.7.3
 
