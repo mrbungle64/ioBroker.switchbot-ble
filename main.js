@@ -108,8 +108,8 @@ class SwitchbotBle extends utils.Adapter {
                 clearInterval(this.scanDevicesInterval);
                 this.scanDevicesInterval = null;
             }
-            process.exit();
             callback();
+            process.exit();
         } catch (e) {
             callback();
         }
