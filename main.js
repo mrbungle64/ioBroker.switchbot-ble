@@ -27,7 +27,7 @@ class SwitchbotBle extends utils.Adapter {
 
         /**
          * @type {{[mac: String]: {address: String, rssi: Number, id: String,
-         *                         serviceData: {model: 'H'|'T'|'c'|'s'|'d'|'i'|'o'|'w', modelName: String, battery: Number, state: Boolean, mode: Boolean,
+         *                         serviceData: {model: 'H'|'T'|'c'|'{'|'s'|'d'|'i'|'o'|'w', modelName: String, battery: Number, state: Boolean, mode: Boolean,
          *                                       temperature: {c: Number, f: Number}, humidity: Number,
          *                                       position: Number, calibration: Number, lightLevel: Number, movement: Boolean, doorState: String},
          *                         on: Boolean}}}
@@ -151,33 +151,34 @@ class SwitchbotBle extends utils.Adapter {
         }
 
         const on = this.switchbotDevice[macAddress].on;
+        const model = this.switchbotDevice[macAddress].serviceData.model;
         switch (cmd) {
             case 'turnOn':
                 if (on) {
                     this.log.info(`[deviceAction] ${helper.getProductName('H')} (${macAddress}) already turned on`);
                 } else {
-                    await this.botAction(cmd, macAddress, 'H');
+                    await this.botAction(cmd, macAddress, model);
                 }
                 break;
             case 'turnOff':
                 if (!on) {
                     this.log.info(`[deviceAction] ${helper.getProductName('H')} (${macAddress}) already turned off`);
                 } else {
-                    await this.botAction(cmd, macAddress, 'H');
+                    await this.botAction(cmd, macAddress, model);
                 }
                 break;
             case 'press':
             case 'up':
             case 'down':
-                await this.botAction(cmd, macAddress, 'H');
+                await this.botAction(cmd, macAddress, model);
                 break;
             case 'open':
             case 'close':
             case 'pause':
-                await this.botAction(cmd, macAddress, 'c');
+                await this.botAction(cmd, macAddress, model);
                 break;
             case 'runToPos':
-                await this.botAction(cmd, macAddress, 'c', value);
+                await this.botAction(cmd, macAddress, model, value);
                 break;
             default:
                 this.log.debug(`[deviceAction] unhandled control cmd '${cmd}' for device ${macAddress}`);
