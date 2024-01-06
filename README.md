@@ -103,6 +103,10 @@ $ sudo setcap cap_net_raw+eip $(eval readlink -f `which node`)
 
 ## Changelog
 
+### 0.4.9
+* Added offset values for temperature and humidity
+* Added more time interval options
+
 ### 0.4.8
 * Bumped node-switchbot to 1.10.0
   * Added support for Curtain 3
