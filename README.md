@@ -16,16 +16,17 @@ If you are looking for Hub Plus/Mini support, [this adapter](https://github.com/
 ### Supported models
 
 * SwitchBot "Bot"
-* SwitchBot "Meter"
 * SwitchBot "Contact"
 * SwitchBot "Motion"
+* SwitchBot "Meter"
+* SwitchBot "Meter Plus"
+* SwitchBot "Indoor/Outdoor Hygrometer"
 
 The models listed are those that I have in use myself.
 
 #### Other models
 
 * SwitchBot "Curtain"
-* SwitchBot "Meter Plus"
 
 These models are known to work, but I don't have them in use myself.
 
