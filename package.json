@@ -24,11 +24,11 @@
     "url": "https://github.com/mrbungle64/ioBroker.switchbot-ble"
   },
   "dependencies": {
-    "@iobroker/adapter-core": "3.1.6",
+    "@iobroker/adapter-core": "3.2.3",
     "node-switchbot": "1.10.0"
   },
   "engines": {
-    "node": ">=16"
+    "node": ">=18"
   },
   "devDependencies": {
     "@iobroker/testing": "^4.1.0",
