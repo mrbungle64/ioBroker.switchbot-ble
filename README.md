@@ -192,7 +192,7 @@ $ sudo setcap cap_net_raw+eip $(eval readlink -f `which node`)
 ## License
 MIT License
 
-Copyright (c) 2023 Sascha Hölzel <mrb1232@posteo.de>
+Copyright (c) 2025 Sascha Hölzel <mrb1232@posteo.de>
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
