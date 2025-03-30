@@ -15,7 +15,7 @@ If you are looking for Hub Plus/Mini support, [this adapter](https://github.com/
 
 ### Supported models
 
-* SwitchBot "Bot"
+* SwitchBot "Bot" (see [Known issues](#Known-issues))
 * SwitchBot "Contact"
 * SwitchBot "Motion"
 * SwitchBot "Meter"
@@ -66,9 +66,9 @@ See the documentation of [@abandonware/noble](https://github.com/abandonware/nob
 
 ### Node.js
 
-It is recommended to use version 16.x or 18.x of [Node.js](nodejs.org).
+It is recommended to use version 20.x or higher of [Node.js](nodejs.org).
 
-The minimum required version is 16.x, but support for this version may will be dropped soon.
+The minimum required version is 18.x, but support for this version may will be dropped soon.
 
 ## Installation
 
@@ -102,7 +102,15 @@ $ sudo setcap cap_net_raw+eip $(eval readlink -f `which node`)
 
 * The battery levels are only approximate values
 
+## Known issues
+
+* SwitchBot "Bot" doesn't work with firmware version 6.6 or higher
+
 ## Changelog
+
+### 0.4.10
+* Breaking change: Bump minimum required version of Node.js to 18.x
+* Maintenance
 
 ### 0.4.9
 * Added offset values for temperature and humidity
