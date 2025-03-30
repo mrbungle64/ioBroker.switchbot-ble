@@ -4,8 +4,8 @@
         "version": "0.4.10",
         "news": {
             "0.4.10": {
-                "en": "Bumped minimum required version of Node.js to 18.x",
-                "de": "Minimale Node.js Version wurde auf 18.x erhöht"
+                "en": "Bumped minimum required version of Node.js to 18.x\nMaintenance Release",
+                "de": "Minimale Node.js Version wurde auf 18.x erhöht\nMaintenance Release"
             },
             "0.4.9": {
                 "en": "Added offset values for temperature and humidity",
@@ -87,7 +87,7 @@
         "tier": 3,
         "licenseInformation": {
             "license": "MIT",
-            "link": "https://mit-license.org/"
+            "link": "https://opensource.org/licenses/MIT"
         }
     },
     "native": {
