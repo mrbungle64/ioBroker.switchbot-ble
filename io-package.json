@@ -63,7 +63,6 @@
         "keywords": [
             "SwitchBot"
         ],
-        "license": "MIT",
         "platform": "Javascript/Node.js",
         "main": "main.js",
         "icon": "switchbot-ble.png",
@@ -87,7 +86,7 @@
         "tier": 3,
         "licenseInformation": {
             "license": "MIT",
-            "link": "https://opensource.org/licenses/MIT"
+            "type": "free"
         }
     },
     "native": {
