@@ -26,13 +26,9 @@ class SwitchbotBle extends utils.Adapter {
         this.hciDeviceId = '0';
 
         /**
-         * @type {{[mac: String]: {address: String, rssi: Number, id: String,
-         *                         serviceData: {model: 'H'|'T'|'e'|'s'|'d'|'c'|'{'|'x'|'u'|'g'|'j'|'o'|'i'|'r'|'w',
-         *                                       modelName: String, battery: Number, state: Boolean, mode: Boolean,
-         *                                       temperature: {c: Number, f: Number}, humidity: Number,
-         *                                       position: Number, calibration: Number, lightLevel: Number,
-         *                                       movement: Boolean, doorState: String},
-         *                         on: Boolean}}}
+         * @type {{[mac: string]: {address: string, rssi: number, id: string,
+         *   serviceData: any, // <-- Typ auf any gesetzt, um alle Varianten zuzulassen
+         *   on: boolean}}}
          */
         this.switchbotDevice = {};
         this.retries = 0;
@@ -62,7 +58,7 @@ class SwitchbotBle extends utils.Adapter {
         this.log.info(`Set the NOBLE_HCI_DEVICE_ID environment variable to ${this.hciDeviceId} (hci${this.hciDeviceId})`);
         process.env.NOBLE_HCI_DEVICE_ID = this.hciDeviceId;
 
-        const Switchbot = (await import('node-switchbot')).default;
+        const { SwitchBotBLE: Switchbot } = await import('node-switchbot');
         this.switchbot = new Switchbot();
 
         this.scanDevicesInterval = setInterval(() => {
@@ -188,6 +184,10 @@ class SwitchbotBle extends utils.Adapter {
     }
 
     async botAction(cmd, macAddress, model = 'H', value = null) {
+        if (!this.switchbot) {
+            this.log.error('[botAction] switchbot not initialized');
+            return;
+        }
         this.setIsBusy(true);
         try {
             const device_list = await this.switchbot.discover({
@@ -198,7 +198,9 @@ class SwitchbotBle extends utils.Adapter {
             });
             const bot = device_list[0];
             if (typeof bot === 'undefined') {
-                throw new Error('Discover deviceList is empty!');
+                this.log.error('[botAction] Discover deviceList is empty!');
+                this.setIsBusy(false);
+                return;
             }
             let logMsg = `[botAction] connecting to ${helper.getProductName(model)} (${macAddress}) for executing command '${cmd}'`;
             if (value) {
@@ -206,38 +208,59 @@ class SwitchbotBle extends utils.Adapter {
             }
             this.log.debug(logMsg);
             await bot.connect();
-            switch (cmd) {
-                // SwitchBot "Bot"
-                case 'turnOn':
-                    await bot.turnOn();
-                    break;
-                case 'turnOff':
-                    await bot.turnOff();
-                    break;
-                case 'press':
-                    await bot.press();
-                    break;
-                case 'up':
-                    await bot.up();
-                    break;
-                case 'down':
-                    await bot.down();
-                    break;
-                // SwitchBot "Curtain"
-                case 'open':
-                    await bot.open();
-                    break;
-                case 'close':
-                    await bot.close();
-                    break;
-                case 'pause':
-                    await bot.pause();
-                    break;
-                case 'runToPos':
-                    await bot.runToPos(value);
-                    break;
-                default:
-                    throw new Error(`Unhandled control cmd '${cmd}' for ${helper.getProductName(model)} (${macAddress})`);
+            if (model === 'H') {
+                const woHand = /** @type {import('node-switchbot').WoHand} */ (bot);
+                switch (cmd) {
+                    case 'turnOn':
+                        await woHand.turnOn();
+                        break;
+                    case 'turnOff':
+                        await woHand.turnOff();
+                        break;
+                    case 'press':
+                        await woHand.press();
+                        break;
+                    case 'up':
+                        await woHand.up();
+                        break;
+                    case 'down':
+                        await woHand.down();
+                        break;
+                    default:
+                        this.log.error(`[botAction] Unhandled control cmd '${cmd}' for ${helper.getProductName(model)} (${macAddress})`);
+                        this.setIsBusy(false);
+                        return;
+                }
+            } else if (model === 'c') {
+                const woCurtain = /** @type {import('node-switchbot').WoCurtain} */ (bot);
+                switch (cmd) {
+                    case 'open':
+                        await woCurtain.open();
+                        break;
+                    case 'close':
+                        await woCurtain.close();
+                        break;
+                    case 'pause':
+                        await woCurtain.pause();
+                        break;
+                    case 'runToPos':
+                        if (typeof value === 'number') {
+                            await woCurtain.runToPos(value);
+                        } else {
+                            this.log.error(`[botAction] Invalid value for runToPos: ${value}`);
+                            this.setIsBusy(false);
+                            return;
+                        }
+                        break;
+                    default:
+                        this.log.error(`[botAction] Unhandled control cmd '${cmd}' for ${helper.getProductName(model)} (${macAddress})`);
+                        this.setIsBusy(false);
+                        return;
+                }
+            } else {
+                this.log.error(`[botAction] Unhandled device model '${model}'`);
+                this.setIsBusy(false);
+                return;
             }
             this.retries = 0;
             await bot.disconnect();
@@ -291,7 +314,8 @@ class SwitchbotBle extends utils.Adapter {
                 this.setStateConditional(macAddress + '.on', on, true);
             }
             this.setIsBusy(false);
-        } catch (error) {
+        } catch (e) {
+            const error = /** @type {Error} */ (e);
             if (this.retries < this.maxRetriesDeviceAction) {
                 this.retries++;
                 const logMsg = `[botAction] Will try again (${this.retries}/${this.maxRetriesDeviceAction}) executing '${cmd}' for ${helper.getProductName(model)} (${macAddress})`;
@@ -315,6 +339,10 @@ class SwitchbotBle extends utils.Adapter {
     }
 
     async scanDevices() {
+        if (!this.switchbot) {
+            this.log.error('[scanDevices] switchbot not initialized');
+            return;
+        }
         try {
             this.setIsBusy(true);
             await this.switchbot.startScan();
@@ -322,8 +350,13 @@ class SwitchbotBle extends utils.Adapter {
                 if (!Object.keys(this.switchbotDevice).includes(data.address)) {
                     (async () => {
                         await this.createBotObjects(data);
-                        this.switchbotDevice[data.address] = data;
-                        this.switchbotDevice[data.address].on = this.getOnStateValue(data);
+                        this.switchbotDevice[data.address] = {
+                            address: data.address,
+                            rssi: data.rssi,
+                            id: data.id,
+                            serviceData: data.serviceData,
+                            on: this.getOnStateValue(data)
+                        };
                         this.log.info(`[scanDevices] device detected: ${helper.getProductName(data.serviceData.model)} (${data.address})`);
                     })().catch((error) => {
                         this.log.error(`[scanDevices] error while creating objects: ${error}`);
@@ -336,10 +369,13 @@ class SwitchbotBle extends utils.Adapter {
                 });
             };
             await this.switchbot.wait(this.scanDevicesWait);
-        } catch (error) {
-            this.log.error(`[scanDevices] error: ${error}`);
+        } catch (e) {
+            const error = /** @type {Error} */ (e);
+            this.log.error(`[scanDevices] error: ${error.message}`);
         } finally {
-            this.switchbot.stopScan();
+            if (this.switchbot) {
+                this.switchbot.stopScan();
+            }
             this.setIsBusy(false);
         }
     }
